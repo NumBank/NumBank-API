@@ -1,0 +1,258 @@
+openapi : 3.0.3
+info : 
+  title : MyBank API
+  version : 1.0.0
+  description: |
+    Project app for PROG4 cours by : 
+    Fandresena (STD22058),
+    Sheddy (STD22012),
+    Daris (STD21099)
+
+servers:
+  - url: https://app.numbank.mg
+tags:
+  - name: Account
+  - name: Transaction
+paths:
+
+  /accounts:
+    get:
+      tags:
+        - "Account"
+      summary: Get all Account
+      operationId: getAccounts
+      responses:
+        200:
+          description: Return list of account
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Account'
+
+    post:
+      tags:
+        - "Account"
+      summary: Create account
+      operationId: createAccount
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/CreateAccount'
+      responses:
+        200:
+          description: Return an/list account(s) created successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Account'
+
+
+  /accounts/{id}:
+    get:
+      tags:
+        - "Account"
+      summary: Get account by id
+      operationId: getAccount
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Return an account
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Account'
+    
+    put:
+      tags:
+        - "Account"
+      summary: Update account by id
+      operationId: updateAccount
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Account'
+      responses:
+        200:
+          description: Return an account
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Account'
+
+
+  /transactions:
+    get:
+      tags:
+        - "Transaction"
+      summary: Get all transctions
+      operationId: getTransctions
+      responses:
+        200:
+          description: Return list of transctions
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Transaction'
+
+    post:
+      tags:
+        - "Transaction"
+      summary: Create transction(s)
+      operationId: createTransaction
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/CreateTransaction'
+      responses:
+        200:
+          description: Return a/list of transaction(s)
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Transaction'
+
+  /transactions/{id}:
+    put:
+      tags:
+        - "Transaction"
+      summary: Update transaction by id
+      operationId: updateTransaction
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Transaction'
+      responses:
+        200:
+          description: Return an transaction
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Transaction'
+
+components:
+  schemas:
+    CreateAccount:
+      type: object
+      properties:
+        customerFirstName:
+          type: string
+        customerLastName:
+          type: string
+        birthdate:
+          type: string
+          format: date
+        netSalary:
+          type: number
+          format: double
+        debt:
+          type: boolean
+
+    CreateTransaction:
+      type: object
+      properties:
+        amount:
+          type: number
+          format: double
+        label:
+          type: string
+        dateEffect:
+          type: string
+          format: datetime
+        saveDate:
+          type: string
+          format: datetime
+        extern:
+          type: boolean
+        status:
+          type: boolean
+        category:
+          allOf:
+            - $ref: '#/components/schemas/Category'
+        accountIdDebit:
+          type: string
+          format: uuid
+        accountIdCredit:
+          type: string
+          format: uuid
+
+    Account:
+      type: object
+      allOf:
+        - properties:
+            id:
+              type: string
+              format: uuid
+        - allOf:
+          $ref: '#/components/schemas/CreateAccount'
+        - properties:
+            balance:
+              type: number
+              format: double
+
+    Transaction:
+      type: object
+      allOf:
+        - properties:
+            id:
+              type: string
+              format: uuid
+        - allOf:
+          $ref: '#/components/schemas/CreateTransaction'
+
+    BalanceHistory:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        balance:
+          type: number
+          format: double
+        dateTime:
+          type: string
+          format: datetime
+    
+    Category:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        type:
+          type: string
+
