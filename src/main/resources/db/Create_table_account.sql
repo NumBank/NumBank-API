@@ -1,9 +1,9 @@
 CREATE TABLE IF NOT EXISTS account(
-    id UUID PRIMARY KEY,
+    id SERIAL PRIMARY KEY,
     customerFirstName VARCHAR(200),
     customerLastName VARCHAR(200),
-    birthdate TIMESTAMP,
+    birthdate DATE,
     netSalary DOUBLE PRECISION,
-    number INT UNIQUE,
+    number VARCHAR(10) UNIQUE,
     debt BOOLEAN
 );

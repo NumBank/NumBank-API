@@ -1,5 +1,5 @@
 CREATE TABLE IF NOT EXISTS transaction(
-    id UUID PRIMARY KEY,
+    id SERIAL PRIMARY KEY,
     amount DOUBLE PRECISION,
     lable TEXT,
     dateEffect TIMESTAMP,

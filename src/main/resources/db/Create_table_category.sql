@@ -1,5 +1,5 @@
 CREATE TABLE IF NOT EXISTS category(
-    id UUID PRIMARY KEY,
+    id SERIAL PRIMARY KEY,
     name VARCHAR(200),
     type VARCHAR(200)
 );
