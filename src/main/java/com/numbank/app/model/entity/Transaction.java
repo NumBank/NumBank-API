@@ -17,4 +17,7 @@ public class Transaction {
     private Timestamp saveDate;
     private Boolean extern;
     private Boolean status;
+    private Integer accountIdSender;
+    private Integer accountIdRecipient;
+    private Integer categoryId;
 }
