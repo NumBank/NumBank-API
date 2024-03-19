@@ -3,10 +3,13 @@ package com.numbank.app.repository;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import org.springframework.stereotype.Repository;
+
 import com.numbank.app.model.AutoCRUD;
 import com.numbank.app.model.entity.Account;
 
-public class AccountRepository extends AutoCRUD<Account, String> {
+@Repository
+public class AccountRepository extends AutoCRUD<Account, Integer> {
 
     @Override
     protected String getTableName() {
@@ -30,5 +33,4 @@ public class AccountRepository extends AutoCRUD<Account, String> {
         }
         return null;
     }
-    
 }
