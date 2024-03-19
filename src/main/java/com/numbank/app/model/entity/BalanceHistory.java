@@ -9,7 +9,7 @@ import lombok.*;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-public class BalacenHistory {
+public class BalanceHistory {
     private Integer id;
     private Double balance;
     private Timestamp updateDateTime;
