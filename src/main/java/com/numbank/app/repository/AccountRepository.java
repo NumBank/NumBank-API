@@ -26,7 +26,7 @@ public class AccountRepository extends AutoCRUD<Account, Integer> {
                 resultSet.getDate("birthdate"),
                 resultSet.getDouble("netSalary"),
                 resultSet.getString("number"),
-                resultSet.getBoolean("debtActivate")
+                resultSet.getBoolean("debt")
             );
         } catch (SQLException e) {
             e.printStackTrace();
