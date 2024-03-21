@@ -15,12 +15,12 @@ public class Transaction {
     private Timestamp saveDate;
     private Boolean extern;
     private Boolean status;
-    private Integer accountIdSender;
-    private Integer accountIdRecipient;
-    private Integer categoryId;
+    private String accountIdSender;
+    private String accountIdRecipient;
+    private String categoryId;
     
     public Transaction(Double amount, String label, Timestamp dateEffect, Timestamp saveDate, Boolean extern,
-            Boolean status, Integer accountIdSender, Integer accountIdRecipient, Integer categoryId) {
+            Boolean status, String accountIdSender, String accountIdRecipient, String categoryId) {
         this.amount = amount;
         this.label = label;
         this.dateEffect = dateEffect;
