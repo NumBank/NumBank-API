@@ -111,11 +111,15 @@ public abstract class AutoCRUD<T, ID> implements CRUD<T, ID>{
     
             StringBuilder queryBuilder = new StringBuilder("INSERT INTO " + getTableName() + " (");
                 for (Field field : fields) {
+                    if (field.getName().equals("balance"))
+                        continue;
                     queryBuilder.append(field.getName()).append(", ");
                 }
                 queryBuilder.delete(queryBuilder.length() - 2, queryBuilder.length());
                 queryBuilder.append(") VALUES ( ");
                 for (Field field : fields) {
+                    if (field.getName().equals("balance"))
+                        continue;
                     field.setAccessible(true);
                     Object value = field.get(toSave);
                     queryBuilder.append("'" + value + "', ");
@@ -158,6 +162,8 @@ public abstract class AutoCRUD<T, ID> implements CRUD<T, ID>{
             StringBuilder queryBuilder = new StringBuilder("UPDATE " + getTableName() + " SET ");
                 Object id = null;
                 for (Field field : fields) {
+                    if (field.getName().equals("balance"))
+                        continue;
                     field.setAccessible(true);
                     Object value = field.get(toUpdate);
                     queryBuilder.append(field.getName()).append(" = '" + value + "', " );
