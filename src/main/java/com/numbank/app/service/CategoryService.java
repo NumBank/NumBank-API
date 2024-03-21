@@ -1,6 +1,7 @@
 package com.numbank.app.service;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 
@@ -11,7 +12,7 @@ import com.numbank.app.repository.CategoryRepository;
 public class CategoryService {
     private CategoryRepository repo;
 
-    public Category getById(Integer id) {
+    public Category getById(String id) {
         return repo.getById(id);
     }
 
@@ -20,10 +21,14 @@ public class CategoryService {
     }
 
     public Category save(Category category) {
+            category.setId(UUID.randomUUID().toString());
         return repo.save(category);
     }
 
     public List<Category> saveAll(List<Category> categories) {
+        for (Category category : categories) {
+            category.setId(UUID.randomUUID().toString());
+        }
         return repo.saveAll(categories);
     }
 }
