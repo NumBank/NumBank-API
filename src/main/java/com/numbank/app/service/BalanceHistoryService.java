@@ -10,7 +10,10 @@ import org.springframework.stereotype.Service;
 import com.numbank.app.model.entity.BalanceHistory;
 import com.numbank.app.repository.BalanceHistoryRepository;
 
+import lombok.AllArgsConstructor;
+
 @Service
+@AllArgsConstructor
 public class BalanceHistoryService {
     private BalanceHistoryRepository repo;
 
@@ -28,11 +31,7 @@ public class BalanceHistoryService {
         return repo.save(balanceHistory);
     }
 
-    public List<BalanceHistory> saveAll(List<BalanceHistory> balanceHistories) {
-        for (BalanceHistory balanceHistory : balanceHistories) {
-            balanceHistory.setId(UUID.randomUUID().toString());
-            balanceHistory.setUpdateDateTime(Timestamp.valueOf(LocalDateTime.now()));
-        }
-        return repo.saveAll(balanceHistories);
+    public Double getBalanceByAccountId(String id) {
+        return repo.getBalanceNow(id).getValue();
     }
 }

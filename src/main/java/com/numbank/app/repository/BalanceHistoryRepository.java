@@ -1,10 +1,13 @@
 package com.numbank.app.repository;
 
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 import org.springframework.stereotype.Repository;
 
+import com.numbank.app.config.ConnectionDB;
 import com.numbank.app.model.AutoCRUD;
 import com.numbank.app.model.entity.BalanceHistory;
 
@@ -21,9 +24,9 @@ public class BalanceHistoryRepository extends AutoCRUD<BalanceHistory, String> {
         try {
             return new BalanceHistory(
                 resultSet.getString("id"),
-                resultSet.getDouble("balance"),
+                resultSet.getDouble("value"),
                 resultSet.getTimestamp("updatedatetime"),
-                resultSet.getInt("id_account")
+                resultSet.getString("accountid")
             );
         } catch (SQLException e) {
             e.printStackTrace();
@@ -31,4 +34,44 @@ public class BalanceHistoryRepository extends AutoCRUD<BalanceHistory, String> {
         return null;
     }
 
+    public BalanceHistory getBalanceNow(String id) {
+        Connection connection = null;
+        Statement statement = null;
+        ResultSet resultSet = null;
+
+        try {
+            connection = ConnectionDB.createConnection();
+            statement = connection.createStatement();
+
+            String sql = "SELECT bh.* FROM \"account\" a INNER JOIN \"balancehistory\" bh ON bh.accountid = a.id " +
+                        "WHERE a.id = '" + id + "' " +
+                        "ORDER BY updatedatetime DESC " +
+                        "LIMIT 1;";
+
+            resultSet = statement.executeQuery(sql);
+            BalanceHistory responseSQL = null;
+
+            while (resultSet.next()) {
+                responseSQL = new BalanceHistory(
+                    resultSet.getString("id"),
+                    resultSet.getDouble("value"),
+                    resultSet.getTimestamp("updatedatetime"),
+                    resultSet.getString("accountid")
+                );
+            }
+            return responseSQL;
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+
+        } finally {
+            try {
+                if (resultSet != null) resultSet.close();
+                if (statement != null) statement.close();
+                if (connection != null) connection.close();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
 }
