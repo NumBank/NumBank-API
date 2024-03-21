@@ -11,10 +11,10 @@ CREATE TABLE IF NOT EXISTS "account" (
 );
 
 -- BALANCEHISTORY
-CREATE TABLE IF NOT EXISTS "balanceHistory" (
+CREATE TABLE IF NOT EXISTS "balancehistory" (
     id UUID PRIMARY KEY,
-    balance DOUBLE PRECISION,
-    dateTime TIMESTAMP,
+    value DOUBLE PRECISION,
+    updateDateTime TIMESTAMP,
     accountId UUID REFERENCES account(id)
 );
 
