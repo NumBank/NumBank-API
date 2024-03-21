@@ -51,6 +51,7 @@ public class AccountService {
     }
 
     public Account update(Account account) {
+        account.setBalance(balanceService.getBalanceByAccountId(account.getId()));
         return repo.update(account);
     }
 }
