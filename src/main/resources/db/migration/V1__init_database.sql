@@ -29,7 +29,7 @@ CREATE TABLE IF NOT EXISTS "category" (
 CREATE TABLE IF NOT EXISTS "transaction" (
     id UUID PRIMARY KEY,
     amount DOUBLE PRECISION,
-    lable TEXT,
+    label TEXT,
     dateEffect TIMESTAMP,
     saveDate TIMESTAMP,
     extern BOOLEAN,
