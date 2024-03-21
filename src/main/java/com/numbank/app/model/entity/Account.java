@@ -15,6 +15,7 @@ public class Account {
     private Double netSalary;
     private String number;
     private Boolean debt;
+    private Double balance;
 
     public Account(String customerFirstName, String customerLastName, Date birthdate, Double netSalary,
             String number, Boolean debt) {
