@@ -1,7 +1,7 @@
 openapi : 3.0.3
 info : 
   title : MyBank API
-  version : 1.0.0
+  version : 2.0.0
   description: |
     Project app for PROG4 cours by : 
     Fandresena (STD22058),
@@ -115,18 +115,19 @@ paths:
                 items:
                   $ref: '#/components/schemas/Transaction'
 
+  /transactions/supply:
     post:
       tags:
         - "Transaction"
       summary: Create transction(s)
-      operationId: createTransaction
+      operationId: createSupply
       requestBody:
         content:
           application/json:
             schema:
               type: array
               items:
-                $ref: '#/components/schemas/CreateTransaction'
+                $ref: '#/components/schemas/CreateSupply'
       responses:
         200:
           description: Return a/list of transaction(s)
@@ -135,7 +136,30 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Transaction'
+                  $ref: '#/components/schemas/Supply'
+
+  /transactions/transfert:
+    post:
+      tags:
+        - "Transaction"
+      summary: Create transction(s)
+      operationId: createTransfert
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/CreateTransfert'
+      responses:
+        200:
+          description: Return a/list of transaction(s)
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Transfert'
 
   /transactions/{id}:
     put:
@@ -177,8 +201,26 @@ components:
         netSalary:
           type: number
           format: double
+        number:
+          type: string
+          example: 1234567890
         debt:
           type: boolean
+          example: false
+
+    Account:
+      type: object
+      allOf:
+        - properties:
+            id:
+              type: string
+              format: uuid
+        - allOf:
+          $ref: '#/components/schemas/CreateAccount'
+        - properties:
+            balance:
+              type: number
+              format: double
 
     CreateTransaction:
       type: object
@@ -200,27 +242,7 @@ components:
           type: boolean
         category:
           allOf:
-            - $ref: '#/components/schemas/Category'
-        accountIdDebit:
-          type: string
-          format: uuid
-        accountIdCredit:
-          type: string
-          format: uuid
-
-    Account:
-      type: object
-      allOf:
-        - properties:
-            id:
-              type: string
-              format: uuid
-        - allOf:
-          $ref: '#/components/schemas/CreateAccount'
-        - properties:
-            balance:
-              type: number
-              format: double
+            - $ref: '#/components/schemas/CreateCategory'
 
     Transaction:
       type: object
@@ -231,6 +253,49 @@ components:
               format: uuid
         - allOf:
           $ref: '#/components/schemas/CreateTransaction'
+    
+    CreateSupply:
+      type: object
+      allOf:
+        - allOf:
+          $ref: '#/components/schemas/CreateTransaction'
+        - properties:
+            accountId:
+              type: string
+              format: uuid
+
+    Supply:
+      type: object
+      allOf:
+        - properties:
+            id:
+              type: string
+              format: uuid
+        - allOf:
+          $ref: '#/components/schemas/CreateSupply'
+    
+    CreateTransfert:
+      type: object
+      allOf:
+        - allOf:
+          $ref: '#/components/schemas/CreateTransaction'
+        - properties:
+            accountIdDebit:
+              type: string
+              format: uuid
+            accountIdCredit:
+              type: string
+              format: uuid
+
+    Transfert:
+      type: object
+      allOf:
+        - properties:
+            id:
+              type: string
+              format: uuid
+        - allOf:
+          $ref: '#/components/schemas/CreateTransfert'
 
     BalanceHistory:
       type: object
@@ -245,14 +310,20 @@ components:
           type: string
           format: datetime
     
-    Category:
+    CreateCategory:
       type: object
       properties:
-        id:
-          type: string
-          format: uuid
         name:
           type: string
         type:
           type: string
 
+    Category:
+      type: object
+      allOf:
+        - properties:
+            id:
+              type: string
+              format: uuid
+        - allOf:
+          $ref: '#/components/schemas/CreateCategory'
