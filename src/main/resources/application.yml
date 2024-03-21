@@ -5,13 +5,11 @@ spring:
     url: ${DB_URL}
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
-  sql:
-    init:
-      mode: embedded
-      data-locations: classpath:db/migration
   flyway:
+    baseline-on-migrate: true
+    enabled: true
     user: ${DB_USERNAME}
     password: ${DB_PASSWORD}
     locations: classpath:db/migration
-    baseline-on-migrate: true
-    enabled: true
+    driver-class-name: org.posatgresql.Driver
+    schemas:
