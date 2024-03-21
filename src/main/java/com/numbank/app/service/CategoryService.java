@@ -8,7 +8,10 @@ import org.springframework.stereotype.Service;
 import com.numbank.app.model.entity.Category;
 import com.numbank.app.repository.CategoryRepository;
 
+import lombok.AllArgsConstructor;
+
 @Service
+@AllArgsConstructor
 public class CategoryService {
     private CategoryRepository repo;
 

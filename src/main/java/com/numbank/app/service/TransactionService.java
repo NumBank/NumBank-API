@@ -8,7 +8,10 @@ import org.springframework.stereotype.Service;
 import com.numbank.app.model.entity.Transaction;
 import com.numbank.app.repository.TransactionRepository;
 
+import lombok.AllArgsConstructor;
+
 @Service
+@AllArgsConstructor
 public class TransactionService {
     private TransactionRepository repo;
 
