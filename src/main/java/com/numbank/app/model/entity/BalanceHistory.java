@@ -11,9 +11,9 @@ public class BalanceHistory {
     private String id;
     private Double balance;
     private Timestamp updateDateTime;
-    private Integer accountId;
+    private String accountId;
     
-    public BalanceHistory(Double balance, Integer accountId) {
+    public BalanceHistory(Double balance, String accountId) {
         this.balance = balance;
         this.accountId = accountId;
     }
