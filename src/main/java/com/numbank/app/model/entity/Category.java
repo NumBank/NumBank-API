@@ -8,7 +8,12 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Category {
-    private Integer id;
+    private String id;
     private String name;
     private String type;
+
+    public Category(String name, String type) {
+        this.name = name;
+        this.type = type;
+    }
 }

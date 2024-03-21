@@ -10,7 +10,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Transaction {
-    private Integer id;
+    private String id;
     private Double amount;
     private String label;
     private Timestamp dateEffect;
@@ -20,4 +20,17 @@ public class Transaction {
     private Integer accountIdSender;
     private Integer accountIdRecipient;
     private Integer categoryId;
+    
+    public Transaction(Double amount, String label, Timestamp dateEffect, Timestamp saveDate, Boolean extern,
+            Boolean status, Integer accountIdSender, Integer accountIdRecipient, Integer categoryId) {
+        this.amount = amount;
+        this.label = label;
+        this.dateEffect = dateEffect;
+        this.saveDate = saveDate;
+        this.extern = extern;
+        this.status = status;
+        this.accountIdSender = accountIdSender;
+        this.accountIdRecipient = accountIdRecipient;
+        this.categoryId = categoryId;
+    }
 }

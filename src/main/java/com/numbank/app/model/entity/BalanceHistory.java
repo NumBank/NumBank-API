@@ -10,8 +10,13 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class BalanceHistory {
-    private Integer id;
+    private String id;
     private Double balance;
     private Timestamp updateDateTime;
     private Integer accountId;
+    
+    public BalanceHistory(Double balance, Integer accountId) {
+        this.balance = balance;
+        this.accountId = accountId;
+    }
 }
