@@ -9,7 +9,7 @@ import com.numbank.app.model.AutoCRUD;
 import com.numbank.app.model.entity.Category;
 
 @Repository
-public class CategoryRepository extends AutoCRUD<Category, Integer>{
+public class CategoryRepository extends AutoCRUD<Category, String>{
     
     @Override
     protected String getTableName() {
@@ -20,7 +20,7 @@ public class CategoryRepository extends AutoCRUD<Category, Integer>{
     protected Category mapResultSetToEntity(ResultSet resultSet) {
         try {
             return new Category(
-                resultSet.getInt("id"),
+                resultSet.getString("id"),
                 resultSet.getString("name"),
                 resultSet.getString("type")
             );

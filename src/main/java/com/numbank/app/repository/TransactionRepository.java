@@ -9,7 +9,7 @@ import com.numbank.app.model.AutoCRUD;
 import com.numbank.app.model.entity.Transaction;
 
 @Repository
-public class TransactionRepository extends AutoCRUD<Transaction, Integer>{
+public class TransactionRepository extends AutoCRUD<Transaction, String>{
     
     @Override
     protected String getTableName() {
@@ -20,7 +20,7 @@ public class TransactionRepository extends AutoCRUD<Transaction, Integer>{
     protected Transaction mapResultSetToEntity(ResultSet resultSet) {
         try {
             return new Transaction(
-                resultSet.getInt("id"),
+                resultSet.getString("id"),
                 resultSet.getDouble("amount"),
                 resultSet.getString("label"),
                 resultSet.getTimestamp("dateeffect"),

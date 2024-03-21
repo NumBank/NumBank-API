@@ -9,7 +9,7 @@ import com.numbank.app.model.AutoCRUD;
 import com.numbank.app.model.entity.Account;
 
 @Repository
-public class AccountRepository extends AutoCRUD<Account, Integer> {
+public class AccountRepository extends AutoCRUD<Account, String> {
 
     @Override
     protected String getTableName() {
@@ -20,7 +20,7 @@ public class AccountRepository extends AutoCRUD<Account, Integer> {
     protected Account mapResultSetToEntity(ResultSet resultSet) {
         try {
             return new Account(
-                resultSet.getInt("id"),
+                resultSet.getString("id"),
                 resultSet.getString("customerFirstName"),
                 resultSet.getString("customerLastName"),
                 resultSet.getDate("birthdate"),

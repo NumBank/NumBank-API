@@ -9,7 +9,7 @@ import com.numbank.app.model.AutoCRUD;
 import com.numbank.app.model.entity.BalanceHistory;
 
 @Repository
-public class BalanceHistoryRepository extends AutoCRUD<BalanceHistory, Integer> {
+public class BalanceHistoryRepository extends AutoCRUD<BalanceHistory, String> {
     
     @Override
     protected String getTableName() {
@@ -20,7 +20,7 @@ public class BalanceHistoryRepository extends AutoCRUD<BalanceHistory, Integer> 
     protected BalanceHistory mapResultSetToEntity(ResultSet resultSet) {
         try {
             return new BalanceHistory(
-                resultSet.getInt("id"),
+                resultSet.getString("id"),
                 resultSet.getDouble("balance"),
                 resultSet.getTimestamp("updatedatetime"),
                 resultSet.getInt("id_account")
