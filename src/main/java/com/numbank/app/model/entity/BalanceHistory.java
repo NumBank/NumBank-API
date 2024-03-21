@@ -9,12 +9,12 @@ import lombok.*;
 @NoArgsConstructor
 public class BalanceHistory {
     private String id;
-    private Double balance;
+    private Double value;
     private Timestamp updateDateTime;
     private String accountId;
     
-    public BalanceHistory(Double balance, String accountId) {
-        this.balance = balance;
+    public BalanceHistory(Double value, String accountId) {
+        this.value = value;
         this.accountId = accountId;
     }
 }
