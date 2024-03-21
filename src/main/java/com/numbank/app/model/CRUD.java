@@ -10,4 +10,6 @@ public interface CRUD<T, ID> {
     List<T> saveAll(List<T> toSave);
 
     T save(T toSave);
+
+    T update(T toUpdate);
 }

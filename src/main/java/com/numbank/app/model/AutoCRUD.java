@@ -88,8 +88,12 @@ public abstract class AutoCRUD<T, ID> implements CRUD<T, ID>{
     }
 
     @Override
-    public List<T> saveAll(List<T> toSave) {
-        return null;
+    public List<T> saveAll(List<T> toSaves) {
+        List<T> allSaves = new ArrayList<>();
+        for (T toSave : toSaves) {
+            allSaves.add(save(toSave));
+        }
+        return allSaves;
     }
 
     @Override
@@ -107,26 +111,14 @@ public abstract class AutoCRUD<T, ID> implements CRUD<T, ID>{
     
             StringBuilder queryBuilder = new StringBuilder("INSERT INTO " + getTableName() + " (");
                 for (Field field : fields) {
-                    if (field.getName().equals("balance") || field.getType().equals(List.class)) {
-                        continue;
-                    } else if (field.getName() == "currency") {
-                        queryBuilder.append("currencyid").append(", ");
-                    } else {
-                        queryBuilder.append(field.getName()).append(", ");
-                    }
+                    queryBuilder.append(field.getName()).append(", ");
                 }
                 queryBuilder.delete(queryBuilder.length() - 2, queryBuilder.length());
                 queryBuilder.append(") VALUES ( ");
                 for (Field field : fields) {
                     field.setAccessible(true);
                     Object value = field.get(toSave);
-                    if (field.getName().equals("balance") || field.getType().equals(List.class)) {
-                        continue;
-                    } else if (field.getType().equals(Integer.class) || field.getType().equals(Double.class)) {
-                        queryBuilder.append(value + ", ");
-                    }else {
-                        queryBuilder.append("'" + value + "', ");
-                    }
+                    queryBuilder.append("'" + value + "', ");
                 }
                 queryBuilder.delete(queryBuilder.length() - 2, queryBuilder.length());
                 queryBuilder.append(")");
@@ -135,6 +127,50 @@ public abstract class AutoCRUD<T, ID> implements CRUD<T, ID>{
 
             statement.executeUpdate(insertQuery);
             return toSave;
+
+        } catch (SQLException | IllegalArgumentException | IllegalAccessException e) {
+            throw new RuntimeException(e);
+
+        } finally {
+            try {
+                if (statement != null) statement.close();
+                if (connection != null) connection.close();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+
+    @Override
+    public T update(T toUpdate) {
+        Connection connection = null;
+        Statement statement = null;
+
+        try {
+            connection = ConnectionDB.createConnection();
+            statement = connection.createStatement();
+
+            Class<?> toUpdateClass = toUpdate.getClass();
+
+            Field[] fields = toUpdateClass.getDeclaredFields();
+    
+            StringBuilder queryBuilder = new StringBuilder("UPDATE " + getTableName() + " SET ");
+                String id = null;
+                for (Field field : fields) {
+                    if (field.getName() == "id")
+                        id = (String) field.get("id");
+                    field.setAccessible(true);
+                    Object value = field.get(toUpdate);
+                    queryBuilder.append(field.getName()).append(" = '" + value + "', " );
+                }
+                queryBuilder.delete(queryBuilder.length() - 2, queryBuilder.length());
+                queryBuilder.append("WHERE id = " + id + ";");
+    
+                String updateQuery = queryBuilder.toString();
+
+            statement.executeUpdate(updateQuery);
+            return toUpdate;
 
         } catch (SQLException | IllegalArgumentException | IllegalAccessException e) {
             throw new RuntimeException(e);
