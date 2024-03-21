@@ -3,8 +3,6 @@ package com.numbank.app.model.entity;
 import lombok.*;
 
 @Data
-@EqualsAndHashCode
-@ToString
 @AllArgsConstructor
 @NoArgsConstructor
 public class Category {

@@ -5,8 +5,6 @@ import java.sql.Timestamp;
 import lombok.*;
 
 @Data
-@EqualsAndHashCode
-@ToString
 @AllArgsConstructor
 @NoArgsConstructor
 public class Transaction {

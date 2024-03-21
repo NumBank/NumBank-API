@@ -5,8 +5,6 @@ import java.sql.Date;
 import lombok.*;
 
 @Data
-@EqualsAndHashCode
-@ToString
 @AllArgsConstructor
 @NoArgsConstructor
 public class Account {
