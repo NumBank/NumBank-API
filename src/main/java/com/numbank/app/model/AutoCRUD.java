@@ -156,16 +156,16 @@ public abstract class AutoCRUD<T, ID> implements CRUD<T, ID>{
             Field[] fields = toUpdateClass.getDeclaredFields();
     
             StringBuilder queryBuilder = new StringBuilder("UPDATE " + getTableName() + " SET ");
-                String id = null;
+                Object id = null;
                 for (Field field : fields) {
-                    if (field.getName() == "id")
-                        id = (String) field.get("id");
                     field.setAccessible(true);
                     Object value = field.get(toUpdate);
                     queryBuilder.append(field.getName()).append(" = '" + value + "', " );
+                    if (field.getName() == "id")
+                        id = value;
                 }
                 queryBuilder.delete(queryBuilder.length() - 2, queryBuilder.length());
-                queryBuilder.append("WHERE id = " + id + ";");
+                queryBuilder.append(" WHERE id = '" + id + "' ;");
     
                 String updateQuery = queryBuilder.toString();
 
