@@ -13,6 +13,8 @@ import com.numbank.app.service.TransactionService;
 
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+
 
 @RestController
 @AllArgsConstructor
@@ -26,12 +28,17 @@ public class TransactionController {
     }
 
     @GetMapping({"/{id}"})
-    public Transaction getTransactionById(@PathVariable("id") Integer id) {
+    public Transaction getTransactionById(@PathVariable("id") String id) {
         return service.getById(id);
     }
     
     @PostMapping({"", "/"})
     public List<Transaction> saveTransactions(@RequestBody List<Transaction> transactions) {
         return service.saveAll(transactions);
+    }
+
+    @PutMapping({"/{id}"})
+    public Transaction updateTransaction(@PathVariable String id, @RequestBody Transaction transaction) {
+        return service.update(transaction);
     }
 }
