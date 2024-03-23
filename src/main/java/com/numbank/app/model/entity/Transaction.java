@@ -2,7 +2,9 @@ package com.numbank.app.model.entity;
 
 import java.sql.Timestamp;
 
-import lombok.*;
+import lombok.Data;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor
@@ -15,20 +17,41 @@ public class Transaction {
     private Timestamp saveDate;
     private Boolean extern;
     private Boolean status;
-    private String accountIdSender;
-    private String accountIdRecipient;
+    private String accountId;
     private String categoryId;
     
     public Transaction(Double amount, String label, Timestamp dateEffect, Timestamp saveDate, Boolean extern,
-            Boolean status, String accountIdSender, String accountIdRecipient, String categoryId) {
+            Boolean status, String accountId, String categoryId) {
         this.amount = amount;
         this.label = label;
         this.dateEffect = dateEffect;
         this.saveDate = saveDate;
         this.extern = extern;
         this.status = status;
-        this.accountIdSender = accountIdSender;
-        this.accountIdRecipient = accountIdRecipient;
+        this.categoryId = categoryId;
+        this.accountId = accountId;
+    }
+
+    public Transaction(Double amount, String label, Timestamp dateEffect, Timestamp saveDate, Boolean extern,
+            Boolean status, String categoryId) {
+        this.amount = amount;
+        this.label = label;
+        this.dateEffect = dateEffect;
+        this.saveDate = saveDate;
+        this.extern = extern;
+        this.status = status;
+        this.categoryId = categoryId;
+    }
+
+    public Transaction(String id, Double amount, String label, Timestamp dateEffect, Timestamp saveDate,
+            Boolean extern, Boolean status, String categoryId) {
+        this.id = id;
+        this.amount = amount;
+        this.label = label;
+        this.dateEffect = dateEffect;
+        this.saveDate = saveDate;
+        this.extern = extern;
+        this.status = status;
         this.categoryId = categoryId;
     }
 }
