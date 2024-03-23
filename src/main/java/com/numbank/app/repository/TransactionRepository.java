@@ -27,8 +27,7 @@ public class TransactionRepository extends AutoCRUD<Transaction, String>{
                 resultSet.getTimestamp("savedate"),
                 resultSet.getBoolean("extern"),
                 resultSet.getBoolean("status"),
-                resultSet.getString("accountIdSender"),
-                resultSet.getString("accountIdRecipient"),
+                resultSet.getString("accountId"),
                 resultSet.getString("categoryId")
             );
         } catch (SQLException e) {
