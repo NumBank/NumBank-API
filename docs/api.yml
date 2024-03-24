@@ -1,7 +1,7 @@
 openapi : 3.0.3
 info : 
   title : MyBank API
-  version : 2.0.1
+  version : 2.0.2
   description: |
     Project app for PROG4 cours by : 
     Fandresena (STD22058),
@@ -240,9 +240,9 @@ components:
           type: boolean
         status:
           type: boolean
-        category:
-          allOf:
-            - $ref: '#/components/schemas/CreateCategory'
+        categoryId:
+          type: number
+          example: 1
 
     Transaction:
       type: object
@@ -284,10 +284,10 @@ components:
         - allOf:
           $ref: '#/components/schemas/CreateTransaction'
         - properties:
-            accountIdDebit:
+            accountIdSender:
               type: string
               format: uuid
-            accountIdCredit:
+            accountIdRecipient:
               type: string
               format: uuid
 
