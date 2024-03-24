@@ -20,7 +20,7 @@ public class CategoryRepository extends AutoCRUD<Category, String>{
     protected Category mapResultSetToEntity(ResultSet resultSet) {
         try {
             return new Category(
-                resultSet.getString("id"),
+                resultSet.getInt("id"),
                 resultSet.getString("name"),
                 resultSet.getString("type")
             );

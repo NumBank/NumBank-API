@@ -8,7 +8,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class BalanceHistory {
-    private String id;
+    private Integer id;
     private Double value;
     private Timestamp updateDateTime;
     private String accountId;

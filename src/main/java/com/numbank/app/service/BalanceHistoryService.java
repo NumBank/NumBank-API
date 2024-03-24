@@ -3,7 +3,6 @@ package com.numbank.app.service;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 
@@ -26,7 +25,6 @@ public class BalanceHistoryService {
     }
 
     public BalanceHistory save(BalanceHistory balanceHistory) {
-            balanceHistory.setId(UUID.randomUUID().toString());
             balanceHistory.setUpdateDateTime(Timestamp.valueOf(LocalDateTime.now()));
         return repo.save(balanceHistory);
     }

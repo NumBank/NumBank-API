@@ -6,7 +6,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Category {
-    private String id;
+    private Integer id;
     private String name;
     private String type;
 
