@@ -12,15 +12,15 @@ CREATE TABLE IF NOT EXISTS "account" (
 
 -- BALANCEHISTORY
 CREATE TABLE IF NOT EXISTS "balancehistory" (
-    id UUID PRIMARY KEY,
+    id SERIAL PRIMARY KEY,
     value DOUBLE PRECISION,
-    updateDateTime TIMESTAMP,
+    updateDateTime TIMESTAMP DEFAULT current_timestamp,
     accountId UUID REFERENCES account(id)
 );
 
 -- CATEGORY
 CREATE TABLE IF NOT EXISTS "category" (
-    id UUID PRIMARY KEY,
+    id SERIAL PRIMARY KEY,
     name VARCHAR(200),
     type VARCHAR(200)
 );
@@ -29,12 +29,25 @@ CREATE TABLE IF NOT EXISTS "category" (
 CREATE TABLE IF NOT EXISTS "transaction" (
     id UUID PRIMARY KEY,
     amount DOUBLE PRECISION,
+    label VARCHAR(10) CHECK (label IN ('DEBIT', 'CREDIT')),
+    dateEffect TIMESTAMP DEFAULT current_timestamp,
+    saveDate TIMESTAMP DEFAULT current_timestamp,
+    extern BOOLEAN DEFAULT false,
+    status BOOLEAN DEFAULT false,
+    accountId UUID REFERENCES account(id),
+    categoryId INT REFERENCES category(id)
+);
+
+-- TRANSFERT
+CREATE TABLE IF NOT EXISTS "transfert" (
+    id UUID PRIMARY KEY,
+    amount DOUBLE PRECISION,
     label TEXT,
-    dateEffect TIMESTAMP,
-    saveDate TIMESTAMP,
-    extern BOOLEAN,
-    status BOOLEAN,
+    dateEffect TIMESTAMP DEFAULT current_timestamp,
+    saveDate TIMESTAMP DEFAULT current_timestamp,
+    extern BOOLEAN DEFAULT false,
+    status BOOLEAN DEFAULT false,
     accountIdSender UUID REFERENCES account(id),
     accountIdRecipient UUID REFERENCES account(id),
-    categoryId UUID REFERENCES category(id)
+    categoryId INT REFERENCES category(id)
 );
