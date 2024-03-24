@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.numbank.app.model.entity.Transaction;
+import com.numbank.app.model.entity.Transfert;
 import com.numbank.app.service.TransactionService;
 
 import lombok.AllArgsConstructor;
@@ -32,9 +33,14 @@ public class TransactionController {
         return service.getById(id);
     }
     
-    @PostMapping({"", "/"})
+    @PostMapping({"/supply"})
     public List<Transaction> saveTransactions(@RequestBody List<Transaction> transactions) {
         return service.saveAll(transactions);
+    }
+    
+    @PostMapping({"/transfert"})
+    public List<Transfert> saveTransfert(@RequestBody List<Transfert> transferts) {
+        return service.saveAllTransferts(transferts);
     }
 
     @PutMapping({"/{id}"})
