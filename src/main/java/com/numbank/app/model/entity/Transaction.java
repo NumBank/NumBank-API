@@ -1,58 +1,34 @@
 package com.numbank.app.model.entity;
 
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
+import com.numbank.app.model.ModelTransaction;
+
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Transaction {
-    private String id;
-    private Double amount;
-    private String label;
-    private LocalDateTime dateEffect;
-    private LocalDateTime saveDate;
-    private Boolean extern;
-    private Boolean status;
+@EqualsAndHashCode(callSuper = true)
+public class Transaction extends ModelTransaction {
     private String accountId;
-    private String categoryId;
+    private Integer categoryId;
     
     public Transaction(Double amount, String label, LocalDateTime dateEffect, LocalDateTime saveDate, Boolean extern,
-            Boolean status, String accountId, String categoryId) {
-        this.amount = amount;
-        this.label = label;
-        this.dateEffect = dateEffect;
-        this.saveDate = saveDate;
-        this.extern = extern;
-        this.status = status;
-        this.categoryId = categoryId;
+            Boolean status, String accountId, Integer categoryId) {
+        super(amount, label, dateEffect, saveDate, extern, status);
         this.accountId = accountId;
-    }
-
-    public Transaction(Double amount, String label, LocalDateTime dateEffect, LocalDateTime saveDate, Boolean extern,
-            Boolean status, String categoryId) {
-        this.amount = amount;
-        this.label = label;
-        this.dateEffect = dateEffect;
-        this.saveDate = saveDate;
-        this.extern = extern;
-        this.status = status;
         this.categoryId = categoryId;
     }
 
     public Transaction(String id, Double amount, String label, LocalDateTime dateEffect, LocalDateTime saveDate,
-            Boolean extern, Boolean status, String categoryId) {
-        this.id = id;
-        this.amount = amount;
-        this.label = label;
-        this.dateEffect = dateEffect;
-        this.saveDate = saveDate;
-        this.extern = extern;
-        this.status = status;
+            Boolean extern, Boolean status, String accountId, Integer categoryId) {
+        super(id, amount, label, dateEffect, saveDate, extern, status);
+        this.accountId = accountId;
         this.categoryId = categoryId;
     }
+    
 }
