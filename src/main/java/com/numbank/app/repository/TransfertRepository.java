@@ -41,8 +41,8 @@ public class TransfertRepository extends AutoCRUD<Transfert, String>{
 
     @Override
     public Transfert save(Transfert toSave) {
-        String sql = "INSERT INTO \"transfert\" (id, amount, label, accountidsender, accountidrecipient) VALUES " +
-        "( '" + toSave.getId() + "', " + toSave.getAmount() + ", '" + toSave.getLabel() + "' , '" + toSave.getAccountIdSender() + "' , '" + toSave.getAccountIdRecipient() + "') ;";
+        String sql = "INSERT INTO \"transfert\" (id, amount, label, dateeffect, savedate, accountidsender, accountidrecipient) VALUES " +
+        "( '" + toSave.getId() + "', " + toSave.getAmount() + ", '" + toSave.getLabel() + "' , '" + toSave.getDateEffect() + "' , '" + toSave.getSaveDate() + "' , '" + toSave.getAccountIdSender() + "' , '" + toSave.getAccountIdRecipient() + "') ;";
 
         try {
             connection.createStatement().executeUpdate(sql);
