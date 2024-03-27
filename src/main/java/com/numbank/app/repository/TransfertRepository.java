@@ -31,8 +31,7 @@ public class TransfertRepository extends AutoCRUD<Transfert, String>{
                 resultSet.getBoolean("extern"),
                 resultSet.getBoolean("status"),
                 resultSet.getString("accountIdSender"),
-                resultSet.getString("accountIdRecipient"),
-                resultSet.getString("categoryId")
+                resultSet.getString("accountIdRecipient")
             );
         } catch (SQLException e) {
             e.printStackTrace();
@@ -42,8 +41,8 @@ public class TransfertRepository extends AutoCRUD<Transfert, String>{
 
     @Override
     public Transfert save(Transfert toSave) {
-        String sql = "INSERT INTO \"transfert\" (id, amount, label, accountidsender, accountidrecipient, categoryid) VALUES " +
-        "( '" + toSave.getId() + "', " + toSave.getAmount() + ", '" + toSave.getLabel() + "' , '" + toSave.getAccountIdSender() + "' , '" + toSave.getAccountIdRecipient() + "', " + toSave.getCategoryId() + "  ) ;";
+        String sql = "INSERT INTO \"transfert\" (id, amount, label, accountidsender, accountidrecipient) VALUES " +
+        "( '" + toSave.getId() + "', " + toSave.getAmount() + ", '" + toSave.getLabel() + "' , '" + toSave.getAccountIdSender() + "' , '" + toSave.getAccountIdRecipient() + "') ;";
 
         try {
             connection.createStatement().executeUpdate(sql);

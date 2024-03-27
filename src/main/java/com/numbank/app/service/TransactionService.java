@@ -58,8 +58,8 @@ public class TransactionService {
         List<Transfert> savedList = new ArrayList<>();
         for (Transfert transfert : transferts) {
             transfert.setId(UUID.randomUUID().toString());
-            save(new Transaction(transfert.getAmount(), "DEBIT", null, null, null, null, transfert.getAccountIdSender(), transfert.getCategoryId()));
-            save(new Transaction(transfert.getAmount(), "CREDIT", null, null, null, null, transfert.getAccountIdRecipient(), transfert.getCategoryId()));
+            save(new Transaction(transfert.getAmount(), "DEBIT", null, null, null, null, transfert.getAccountIdSender(), 2));
+            save(new Transaction(transfert.getAmount(), "CREDIT", null, null, null, null, transfert.getAccountIdRecipient(), 1));
             savedList.add(transfertRepo.save(transfert));
         }
         return savedList;

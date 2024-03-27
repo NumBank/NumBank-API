@@ -32,7 +32,7 @@ public class TransactionRepository extends AutoCRUD<Transaction, String>{
                 resultSet.getBoolean("extern"),
                 resultSet.getBoolean("status"),
                 resultSet.getString("accountId"),
-                resultSet.getString("categoryId")
+                resultSet.getInt("categoryId")
             );
         } catch (SQLException e) {
             e.printStackTrace();
