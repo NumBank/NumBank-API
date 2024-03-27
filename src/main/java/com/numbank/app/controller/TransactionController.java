@@ -32,6 +32,11 @@ public class TransactionController {
     public Transaction getTransactionById(@PathVariable("id") String id) {
         return service.getById(id);
     }
+
+    @GetMapping({"/account/{accountId}"})
+    public List<Transaction> getTransactionByAccountId(@PathVariable("accountId") String accountId) {
+        return service.getByAccountId(accountId);
+    }
     
     @PostMapping({"/supply"})
     public List<Transaction> saveTransactions(@RequestBody List<Transaction> transactions) {
