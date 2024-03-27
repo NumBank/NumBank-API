@@ -51,7 +51,32 @@ public class AccountService {
     }
 
     public Account update(Account account) {
-        account.setBalance(balanceService.getBalanceByAccountId(account.getId()));
-        return repo.update(account);
+        Account accountBefore = getById(account.getId());
+        
+        if (account.getCustomerFirstName() == null || account.getCustomerFirstName().equals(accountBefore.getCustomerFirstName())) {
+            account.setCustomerFirstName(accountBefore.getCustomerFirstName());
+        }
+        
+        if (account.getCustomerLastName() == null || account.getCustomerLastName().equals(accountBefore.getCustomerLastName())) {
+            account.setCustomerLastName(accountBefore.getCustomerLastName());
+        }
+        
+        if (account.getBirthdate() == null || account.getBirthdate().equals(accountBefore.getBirthdate())) {
+            account.setBirthdate(accountBefore.getBirthdate());
+        }
+        
+        if (account.getNetSalary() == null || account.getNetSalary().equals(accountBefore.getNetSalary())) {
+            account.setNetSalary(accountBefore.getNetSalary());
+        }
+        
+        if (account.getDebt() == null || account.getDebt().equals(accountBefore.getDebt())) {
+            account.setDebt(accountBefore.getDebt());
+        }
+        
+        account.setNumber(accountBefore.getNumber());
+        account.setBalance(accountBefore.getBalance());
+
+        repo.update(account);
+        return account;
     }
 }
