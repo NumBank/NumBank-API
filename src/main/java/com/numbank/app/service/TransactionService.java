@@ -56,12 +56,39 @@ public class TransactionService {
     
     public List<Transfert> saveAllTransferts(List<Transfert> transferts) {
         List<Transfert> savedList = new ArrayList<>();
+
         for (Transfert transfert : transferts) {
             transfert.setId(UUID.randomUUID().toString());
-            save(new Transaction(transfert.getAmount(), "DEBIT", null, null, null, null, transfert.getAccountIdSender(), 2));
-            save(new Transaction(transfert.getAmount(), "CREDIT", null, null, null, null, transfert.getAccountIdRecipient(), 1));
+            transfert.setDateEffect(LocalDateTime.now());
+            transfert.setSaveDate(LocalDateTime.now());
+
+            save(new Transaction(
+                transfert.getAmount(),
+                "DEBIT",
+                transfert.getDateEffect(),
+                transfert.getSaveDate(),
+                transfert.getExtern(),
+                transfert.getStatus(),
+                transfert.getAccountIdSender(),
+                2));
+
+            
+            if (transfert.getExtern())
+                transfert.setDateEffect(LocalDateTime.now().plusHours(48));
+            
+            save(new Transaction(
+                transfert.getAmount(),
+                "CREDIT",
+                transfert.getDateEffect(),
+                transfert.getSaveDate(),
+                !transfert.getExtern(),
+                transfert.getStatus(),
+                transfert.getAccountIdRecipient(),
+                1));
+
             savedList.add(transfertRepo.save(transfert));
         }
+
         return savedList;
     }
 
@@ -73,11 +100,13 @@ public class TransactionService {
         Account account = accountService.getById(transaction.getAccountId());
         Double balanceActually = account.getBalance();
         if (balanceActually < transaction.getAmount() && transaction.getLabel().equals("DEBIT")) {
-            System.out.println("Transaction failed: balance not enough.");
-            return false;
-        }
-        if (account.getDebt()) {
-            System.out.println("Transaction failed: account not eligible to debt.");
+            
+            if (account.getDebt()) {
+                System.out.println("Transaction success: account eligible to debt.");
+                return true;
+            }
+
+            System.out.println("Transaction failed: balance not enough");
             return false;
         }
         return true;
