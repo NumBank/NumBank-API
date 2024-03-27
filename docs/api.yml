@@ -1,7 +1,7 @@
 openapi : 3.0.3
 info : 
   title : MyBank API
-  version : 2.0.2
+  version : 2.1.0
   description: |
     Project app for PROG4 cours by : 
     Fandresena (STD22058),
@@ -114,6 +114,26 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Transaction'
+
+  /transactions/account/{accountId}:
+    get:
+      tags:
+        - "Transaction"
+      summary: Get transaction by account id
+      operationId: getTransactionByAccountId
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Return list of transaction
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Transaction'
 
   /transactions/supply:
     post:
