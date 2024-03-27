@@ -1,5 +1,6 @@
 package com.numbank.app.service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -36,17 +37,13 @@ public class TransactionService {
     
     public Transaction save(Transaction transaction) {
         transaction.setId(UUID.randomUUID().toString());
-        Account account = accountService.getById(transaction.getAccountId());
-        Double balanceActually = account.getBalance();
-        if (balanceActually < transaction.getAmount() && transaction.getLabel().equals("DEBIT")) {
-            System.out.println("Transaction failed: balance not enough.");
-            return null;
-        } else if (account.getDebt()) {
-            System.out.println("Transaction failed: account not eligible to debt.");
-            return null;
-        } else {
-            return repo.save(transaction);
+        if (transaction.getDateEffect() == null && transaction.getSaveDate() == null) {
+            transaction.setDateEffect(LocalDateTime.now());
+            transaction.setSaveDate(LocalDateTime.now());
         }
+        if (validateTransaction(transaction))
+            return repo.save(transaction);
+        return null;
     }
 
     public List<Transaction> saveAll(List<Transaction> transactions) {
@@ -70,5 +67,19 @@ public class TransactionService {
 
     public Transaction update(Transaction transaction) {
         return repo.update(transaction);
+    }
+
+    private Boolean validateTransaction(Transaction transaction) {
+        Account account = accountService.getById(transaction.getAccountId());
+        Double balanceActually = account.getBalance();
+        if (balanceActually < transaction.getAmount() && transaction.getLabel().equals("DEBIT")) {
+            System.out.println("Transaction failed: balance not enough.");
+            return false;
+        }
+        if (account.getDebt()) {
+            System.out.println("Transaction failed: account not eligible to debt.");
+            return false;
+        }
+        return true;
     }
 }
