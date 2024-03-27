@@ -45,13 +45,10 @@ public class TransactionService {
             System.out.println("Transaction failed: account not eligible to debt.");
             return null;
         } else {
-            return transaction;
-            // return repo.save(transaction);
+            return repo.save(transaction);
         }
     }
 
-
-    
     public List<Transaction> saveAll(List<Transaction> transactions) {
         List<Transaction> savedList = new ArrayList<>();
         for (Transaction transaction : transactions) {
