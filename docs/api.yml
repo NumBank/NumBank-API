@@ -1,7 +1,7 @@
 openapi : 3.0.3
 info : 
   title : MyBank API
-  version : 2.1.0
+  version : 2.1.1
   description: |
     Project app for PROG4 cours by : 
     Fandresena (STD22058),
@@ -300,16 +300,28 @@ components:
     
     CreateTransfert:
       type: object
-      allOf:
-        - allOf:
-          $ref: '#/components/schemas/CreateTransaction'
-        - properties:
-            accountIdSender:
-              type: string
-              format: uuid
-            accountIdRecipient:
-              type: string
-              format: uuid
+      properties:
+        amount:
+          type: number
+          format: double
+        label:
+          type: string
+        dateEffect:
+          type: string
+          format: datetime
+        saveDate:
+          type: string
+          format: datetime
+        extern:
+          type: boolean
+        status:
+          type: boolean
+        accountIdSender:
+          type: string
+          format: uuid
+        accountIdRecipient:
+          type: string
+          format: uuid
 
     Transfert:
       type: object
