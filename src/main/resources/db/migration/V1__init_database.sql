@@ -48,6 +48,5 @@ CREATE TABLE IF NOT EXISTS "transfert" (
     extern BOOLEAN DEFAULT false,
     status BOOLEAN DEFAULT false,
     accountIdSender UUID REFERENCES account(id),
-    accountIdRecipient UUID REFERENCES account(id),
-    categoryId INT REFERENCES category(id)
+    accountIdRecipient UUID REFERENCES account(id)
 );
