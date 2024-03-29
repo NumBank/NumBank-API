@@ -8,6 +8,7 @@ import java.util.UUID;
 import org.springframework.stereotype.Service;
 
 import com.numbank.app.model.entity.Account;
+import com.numbank.app.model.entity.MoneyDrawal;
 import com.numbank.app.model.entity.Transaction;
 import com.numbank.app.repository.TransactionRepository;
 
@@ -18,6 +19,7 @@ import lombok.AllArgsConstructor;
 public class TransactionService {
     private TransactionRepository repo;
     private AccountService accountService;
+    private MoneyDrawalService moneyDrawalService;
 
     public Transaction getById(String id) {
         return repo.getById(id);
@@ -38,9 +40,7 @@ public class TransactionService {
             transaction.setDateEffect(LocalDateTime.now());
             transaction.setSaveDate(LocalDateTime.now());
         }
-        if (validateTransaction(transaction))
-            return repo.save(transaction);
-        return null;
+        return validateTransaction(transaction);
     }
 
     public List<Transaction> saveAll(List<Transaction> transactions) {
@@ -55,20 +55,22 @@ public class TransactionService {
         return repo.update(transaction);
     }
 
-    private Boolean validateTransaction(Transaction transaction) {
+    private Transaction validateTransaction(Transaction transaction) {
         Account account = accountService.getById(transaction.getAccountId());
         Double balanceActually = account.getBalance();
+
         if (balanceActually < transaction.getAmount() && transaction.getLabel().equals("DEBIT")) {
 
             if (account.getDebt()) {
-
                 System.out.println("Transaction success: account eligible to debt.");
-                return true;
+                moneyDrawalService.save(new MoneyDrawal((transaction.getAmount() - balanceActually), null, transaction.getAccountId()));
+                return repo.save(transaction);
             }
 
-            System.out.println("Transaction failed: balance not enough");
-            return false;
+            System.out.println("Transaction failed: balance not enough or account not eligible to debt");
+            return null;
         }
-        return true;
+
+        return repo.save(transaction);
     }
 }
