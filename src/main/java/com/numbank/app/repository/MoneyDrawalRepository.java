@@ -65,7 +65,7 @@ public class MoneyDrawalRepository extends AutoCRUD<MoneyDrawal, Integer>{
 
             String sql = "SELECT mwd.* FROM \"account\" a INNER JOIN \"moneywithdrawal\" mwd ON mwd.accountid = a.id " +
                     "WHERE a.id = '" + id + "' " +
-                    "ORDER BY withDrawalDate DESC" +
+                    "ORDER BY withDrawalDate DESC " +
                     "LIMIT 1 ;";
 
             resultSet = statement.executeQuery(sql);

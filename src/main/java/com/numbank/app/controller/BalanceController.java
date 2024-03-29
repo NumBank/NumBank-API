@@ -23,7 +23,7 @@ public class BalanceController {
     private BalanceHistoryService serviceBalance;
     private MoneyDrawalService serviceMoneyDrawal;
 
-    @GetMapping("/{accountid}")
+    @GetMapping("/history/{accountid}")
     public List<BalanceHistory> getBalanceHistory(
         @PathVariable("accountid") String accountid,
         @PathParam("startDateTime") String startDateTime,
@@ -39,6 +39,11 @@ public class BalanceController {
         @PathParam("endDateTime") String endDateTime
         ) {
         return serviceMoneyDrawal.getAllByAccountId(accountid, startDateTime, endDateTime);
+    }
+    
+    @GetMapping("/{accountid}")
+    public String getAllBalance(@PathVariable("accountid") String accountid) {
+        return serviceBalance.getAllBalance(accountid);
     }
     
 }

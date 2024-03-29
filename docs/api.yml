@@ -1,7 +1,7 @@
 openapi : 3.0.3
 info : 
   title : MyBank API
-  version : 2.4.2
+  version : 2.5.1
   description: |
     Project app for PROG4 cours by : 
     Fandresena (STD22058),
@@ -182,6 +182,21 @@ paths:
                 items:
                   $ref: '#/components/schemas/Transfert'
 
+    get:
+      tags:
+        - "Transaction"
+      summary: Get all transction(s)
+      operationId: getTransferts
+      responses:
+        200:
+          description: Return a/list of transaction(s)
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Transfert'
+
   /transactions/{id}:
     put:
       tags:
@@ -208,6 +223,49 @@ paths:
                 $ref: '#/components/schemas/Transaction'
 
   /balance/{accountid}:
+    get:
+      tags:
+        - "Balance"
+      summary: Get all balance about an account
+      operationId: getAllBalanceByAccountId
+      parameters:
+        - in: path
+          name: accountid
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - in: query
+          name: startDateTime
+          required: false
+          schema:
+            type: string
+            format: datetime
+        - in: query
+          name: endDateTime
+          required: false
+          schema:
+            type: string
+            format: datetime
+      responses:
+        200:
+          description: Return a list of balance
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  balance:
+                    type: number
+                    format: double
+                  loan:
+                    type: number
+                    format: double
+                  loanInterest:
+                    type: number
+                    format: double
+
+  /balance/history/{accountid}:
     get:
       tags:
         - "Balance"

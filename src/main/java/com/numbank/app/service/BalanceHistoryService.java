@@ -3,11 +3,16 @@ package com.numbank.app.service;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.numbank.app.model.entity.BalanceHistory;
+import com.numbank.app.model.entity.MoneyDrawal;
 import com.numbank.app.repository.BalanceHistoryRepository;
 
 import lombok.AllArgsConstructor;
@@ -16,6 +21,7 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class BalanceHistoryService {
     private BalanceHistoryRepository repo;
+    private MoneyDrawalService serviceMoneyDrawal;
 
     public BalanceHistory getById(String id) {
         return repo.getById(id);
@@ -53,5 +59,30 @@ public class BalanceHistoryService {
         }
 
         return repo.findAllByAccountId(id, sql);
+    }
+
+    public String getAllBalance(String accountId) {
+        ObjectMapper mapper = new ObjectMapper();
+        Map<String, Double> balanceData = new HashMap<>();
+
+        List<MoneyDrawal> allMoneyDrawal = serviceMoneyDrawal.getAllByAccountId(accountId, null, null);
+        Double sumMoneyDrawal = 0.0;
+
+        for (MoneyDrawal moneyDrawal : allMoneyDrawal) {
+            sumMoneyDrawal = sumMoneyDrawal + moneyDrawal.getAmount();
+        }
+
+        balanceData.put("balance", getBalanceByAccountIdNow(accountId));
+        balanceData.put("loan", sumMoneyDrawal);
+        balanceData.put("loanInterest", sumMoneyDrawal + (sumMoneyDrawal * 0.07));
+
+        String json = null;
+        try {
+            json = mapper.writeValueAsString(balanceData);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+
+        return json;
     }
 }
