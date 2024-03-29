@@ -9,9 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.numbank.app.model.entity.Account;
 import com.numbank.app.model.entity.Transaction;
-import com.numbank.app.model.entity.Transfert;
 import com.numbank.app.repository.TransactionRepository;
-import com.numbank.app.repository.TransfertRepository;
 
 import lombok.AllArgsConstructor;
 
@@ -19,7 +17,6 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class TransactionService {
     private TransactionRepository repo;
-    private TransfertRepository transfertRepo;
     private AccountService accountService;
 
     public Transaction getById(String id) {
@@ -54,44 +51,6 @@ public class TransactionService {
         return savedList;
     }
     
-    public List<Transfert> saveAllTransferts(List<Transfert> transferts) {
-        List<Transfert> savedList = new ArrayList<>();
-
-        for (Transfert transfert : transferts) {
-            transfert.setId(UUID.randomUUID().toString());
-            transfert.setDateEffect(LocalDateTime.now());
-            transfert.setSaveDate(LocalDateTime.now());
-
-            save(new Transaction(
-                transfert.getAmount(),
-                "DEBIT",
-                transfert.getDateEffect(),
-                transfert.getSaveDate(),
-                transfert.getExtern(),
-                transfert.getStatus(),
-                transfert.getAccountIdSender(),
-                2));
-
-            
-            if (transfert.getExtern())
-                transfert.setDateEffect(LocalDateTime.now().plusHours(48));
-            
-            save(new Transaction(
-                transfert.getAmount(),
-                "CREDIT",
-                transfert.getDateEffect(),
-                transfert.getSaveDate(),
-                !transfert.getExtern(),
-                transfert.getStatus(),
-                transfert.getAccountIdRecipient(),
-                1));
-
-            savedList.add(transfertRepo.save(transfert));
-        }
-
-        return savedList;
-    }
-
     public Transaction update(Transaction transaction) {
         return repo.update(transaction);
     }
@@ -100,8 +59,9 @@ public class TransactionService {
         Account account = accountService.getById(transaction.getAccountId());
         Double balanceActually = account.getBalance();
         if (balanceActually < transaction.getAmount() && transaction.getLabel().equals("DEBIT")) {
-            
+
             if (account.getDebt()) {
+
                 System.out.println("Transaction success: account eligible to debt.");
                 return true;
             }
