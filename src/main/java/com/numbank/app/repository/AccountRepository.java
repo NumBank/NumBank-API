@@ -23,7 +23,7 @@ public class AccountRepository extends AutoCRUD<Account, String> {
                 resultSet.getString("id"),
                 resultSet.getString("customerFirstName"),
                 resultSet.getString("customerLastName"),
-                resultSet.getDate("birthdate"),
+                resultSet.getDate("birthdate").toLocalDate(),
                 resultSet.getDouble("netSalary"),
                 resultSet.getString("number"),
                 resultSet.getBoolean("debt"),

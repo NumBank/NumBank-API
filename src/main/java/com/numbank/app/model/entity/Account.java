@@ -1,6 +1,6 @@
 package com.numbank.app.model.entity;
 
-import java.sql.Date;
+import java.time.LocalDate;
 
 import lombok.*;
 
@@ -11,13 +11,13 @@ public class Account {
     private String id;
     private String customerFirstName;
     private String customerLastName;
-    private Date birthdate;
+    private LocalDate birthdate;
     private Double netSalary;
     private String number;
     private Boolean debt;
     private Double balance;
 
-    public Account(String customerFirstName, String customerLastName, Date birthdate, Double netSalary,
+    public Account(String customerFirstName, String customerLastName, LocalDate birthdate, Double netSalary,
             String number, Boolean debt) {
         this.customerFirstName = customerFirstName;
         this.customerLastName = customerLastName;
@@ -27,7 +27,7 @@ public class Account {
         this.debt = debt;
     }
 
-    public Account(String customerFirstName, String customerLastName, Date birthdate, Double netSalary,
+    public Account(String customerFirstName, String customerLastName, LocalDate birthdate, Double netSalary,
             String number) {
         this.customerFirstName = customerFirstName;
         this.customerLastName = customerLastName;
