@@ -21,14 +21,14 @@ public class AccountService {
 
     public Account getById(String id) {
         Account account = repo.getById(id);
-        account.setBalance(balanceService.getBalanceByAccountId(id));
+        account.setBalance(balanceService.getBalanceByAccountIdNow(id));
         return account;
     }
 
     public List<Account> getAll() {
         List<Account> allAccounts = repo.findAll();
         for (Account account : allAccounts) {
-            account.setBalance(balanceService.getBalanceByAccountId(account.getId()));
+            account.setBalance(balanceService.getBalanceByAccountIdNow(account.getId()));
         }
         return allAccounts;
     }
