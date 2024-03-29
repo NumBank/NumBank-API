@@ -45,6 +45,11 @@ public class TransactionController {
         return serviceTransaction.saveAll(transactions);
     }
     
+    @GetMapping({"/transfert"})
+    public List<Transfert> getTransferts() {
+        return serviceTransfert.getAll();
+    }
+    
     @PostMapping({"/transfert"})
     public List<Transfert> saveTransfert(@RequestBody List<Transfert> transferts) {
         return serviceTransfert.saveAllTransferts(transferts);
