@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.numbank.app.model.entity.Transaction;
 import com.numbank.app.model.entity.Transfert;
 import com.numbank.app.service.TransactionService;
+import com.numbank.app.service.TransfertService;
 
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,35 +22,36 @@ import org.springframework.web.bind.annotation.PutMapping;
 @AllArgsConstructor
 @RequestMapping("/transactions")
 public class TransactionController {
-    private TransactionService service;
+    private TransactionService serviceTransaction;
+    private TransfertService serviceTransfert;
 
     @GetMapping({"", "/"})
     public List<Transaction> getTransactions() {
-        return service.getAll();
+        return serviceTransaction.getAll();
     }
 
     @GetMapping({"/{id}"})
     public Transaction getTransactionById(@PathVariable("id") String id) {
-        return service.getById(id);
+        return serviceTransaction.getById(id);
     }
 
     @GetMapping({"/account/{accountId}"})
     public List<Transaction> getTransactionByAccountId(@PathVariable("accountId") String accountId) {
-        return service.getByAccountId(accountId);
+        return serviceTransaction.getByAccountId(accountId);
     }
     
     @PostMapping({"/supply"})
     public List<Transaction> saveTransactions(@RequestBody List<Transaction> transactions) {
-        return service.saveAll(transactions);
+        return serviceTransaction.saveAll(transactions);
     }
     
     @PostMapping({"/transfert"})
     public List<Transfert> saveTransfert(@RequestBody List<Transfert> transferts) {
-        return service.saveAllTransferts(transferts);
+        return serviceTransfert.saveAllTransferts(transferts);
     }
 
     @PutMapping({"/{id}"})
     public Transaction updateTransaction(@PathVariable String id, @RequestBody Transaction transaction) {
-        return service.update(transaction);
+        return serviceTransaction.update(transaction);
     }
 }
