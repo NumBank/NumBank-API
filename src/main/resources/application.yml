@@ -12,7 +12,5 @@ spring:
     schemas: public
     locations: classpath:db/migration
     enabled: true
-logging:
-  level:
-    org:
-      flywaydb: DEBUG
+    validate-on-migrate: true
+    baseline-on-migrate: true
