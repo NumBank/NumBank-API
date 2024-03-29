@@ -18,7 +18,7 @@ public class MoneyDrawalRepository extends AutoCRUD<MoneyDrawal, Integer>{
     
     @Override
     protected String getTableName() {
-        return "moneyWithDrawal";
+        return "moneywithdrawal";
     }
 
     @Override
@@ -36,6 +36,24 @@ public class MoneyDrawalRepository extends AutoCRUD<MoneyDrawal, Integer>{
         return null;
     }
 
+    @Override
+    public MoneyDrawal save(MoneyDrawal toSave) {
+        Connection connection = null;
+        
+        try {
+            connection = ConnectionDB.createConnection();
+
+            String sql = "INSERT INTO \"moneywithdrawal\" (amount, withDrawalDate, accountid) VALUES " +
+                "( " + toSave.getAmount() + " , '" + toSave.getWithDrawalDate() + "', '" + toSave.getAccountId() + "') ;";
+
+            connection.createStatement().executeUpdate(sql);
+            return toSave;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public MoneyDrawal getByAccountIdNow(String id) {
         Connection connection = null;
         Statement statement = null;
@@ -45,7 +63,7 @@ public class MoneyDrawalRepository extends AutoCRUD<MoneyDrawal, Integer>{
             connection = ConnectionDB.createConnection();
             statement = connection.createStatement();
 
-            String sql = "SELECT mwd.* FROM \"account\" a INNER JOIN \"moneyWithDrawal\" mwd ON mwd.accountid = a.id " +
+            String sql = "SELECT mwd.* FROM \"account\" a INNER JOIN \"moneywithdrawal\" mwd ON mwd.accountid = a.id " +
                     "WHERE a.id = '" + id + "' " +
                     "ORDER BY withDrawalDate DESC" +
                     "LIMIT 1 ;";
