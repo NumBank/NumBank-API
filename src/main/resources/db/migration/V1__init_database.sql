@@ -52,7 +52,7 @@ CREATE TABLE IF NOT EXISTS "transfert" (
 );
 
 -- MONEY WITH DRAWAL
-CREATE TABLE IF NOT EXISTS "moneyWithDrawal" (
+CREATE TABLE IF NOT EXISTS "moneywithdrawal" (
     id SERIAL PRIMARY KEY,
     amount DOUBLE PRECISION,
     withDrawalDate TIMESTAMP DEFAULT current_timestamp,

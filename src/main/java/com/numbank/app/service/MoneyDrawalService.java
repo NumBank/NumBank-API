@@ -37,14 +37,14 @@ public class MoneyDrawalService {
         String sql;
 
         if (startDateTime == null || endDateTime == null) {
-            sql = "SELECT mwd.* FROM \"account\" a INNER JOIN \"moneyWithDrawal\" mwd ON mwd.accountid = a.id " +
+            sql = "SELECT mwd.* FROM \"account\" a INNER JOIN \"moneywithdrawal\" mwd ON mwd.accountid = a.id " +
                 "WHERE a.id = '" + id + "' " +
                 "ORDER BY withDrawalDate DESC;";
         } else {
             LocalDateTime startDateTimeF = LocalDateTime.parse(startDateTime, formatter);
             LocalDateTime endDateTimeF = LocalDateTime.parse(endDateTime, formatter);
             
-            sql = "SELECT mwd.* FROM \"account\" a INNER JOIN \"moneyWithDrawal\" mwd ON mwd.accountid = a.id " +
+            sql = "SELECT mwd.* FROM \"account\" a INNER JOIN \"moneywithdrawal\" mwd ON mwd.accountid = a.id " +
                 "WHERE a.id = '" + id + "' " +
                 "AND withDrawalDate BETWEEN '" + startDateTimeF.toString() + "' AND '" + endDateTimeF.toString() + "' " +
                 "ORDER BY withDrawalDate DESC;";
