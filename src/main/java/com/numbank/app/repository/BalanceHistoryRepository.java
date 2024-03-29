@@ -77,7 +77,7 @@ public class BalanceHistoryRepository extends AutoCRUD<BalanceHistory, String> {
         }
     }
 
-    public List<BalanceHistory> findAllByAccountId(String id) {
+    public List<BalanceHistory> findAllByAccountId(String id, String sql) {
         Connection connection = null;
         Statement statement = null;
         ResultSet resultSet = null;
@@ -85,10 +85,6 @@ public class BalanceHistoryRepository extends AutoCRUD<BalanceHistory, String> {
         try {
             connection = ConnectionDB.createConnection();
             statement = connection.createStatement();
-
-            String sql = "SELECT bh.* FROM \"account\" a INNER JOIN \"balancehistory\" bh ON bh.accountid = a.id " +
-                    "WHERE a.id = '" + id + "' " +
-                    "ORDER BY updatedatetime DESC;";
 
             resultSet = statement.executeQuery(sql);
             List<BalanceHistory> responseSQL = new ArrayList<>();

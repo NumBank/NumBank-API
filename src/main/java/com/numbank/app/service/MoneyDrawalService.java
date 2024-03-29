@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Service
@@ -31,7 +32,24 @@ public class MoneyDrawalService {
         return repo.getByAccountIdNow(id);
     }
 
-    public List<MoneyDrawal> getAllByAccountId(String id) {
-        return repo.findAllByAccountId(id);
+    public List<MoneyDrawal> getAllByAccountId(String id, String startDateTime, String endDateTime) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        String sql;
+
+        if (startDateTime == null || endDateTime == null) {
+            sql = "SELECT mwd.* FROM \"account\" a INNER JOIN \"moneyWithDrawal\" mwd ON mwd.accountid = a.id " +
+                "WHERE a.id = '" + id + "' " +
+                "ORDER BY withDrawalDate DESC;";
+        } else {
+            LocalDateTime startDateTimeF = LocalDateTime.parse(startDateTime, formatter);
+            LocalDateTime endDateTimeF = LocalDateTime.parse(endDateTime, formatter);
+            
+            sql = "SELECT mwd.* FROM \"account\" a INNER JOIN \"moneyWithDrawal\" mwd ON mwd.accountid = a.id " +
+                "WHERE a.id = '" + id + "' " +
+                "AND withDrawalDate BETWEEN '" + startDateTimeF.toString() + "' AND '" + endDateTimeF.toString() + "' " +
+                "ORDER BY withDrawalDate DESC;";
+        }
+
+        return repo.findAllByAccountId(id, sql);
     }
 }

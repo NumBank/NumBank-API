@@ -1,7 +1,7 @@
 openapi : 3.0.3
 info : 
   title : MyBank API
-  version : 2.4.0
+  version : 2.4.2
   description: |
     Project app for PROG4 cours by : 
     Fandresena (STD22058),
@@ -220,6 +220,18 @@ paths:
           schema:
             type: string
             format: uuid
+        - in: query
+          name: startDateTime
+          required: false
+          schema:
+            type: string
+            format: datetime
+        - in: query
+          name: endDateTime
+          required: false
+          schema:
+            type: string
+            format: datetime
       responses:
         200:
           description: Return a list of balance
@@ -243,6 +255,18 @@ paths:
           schema:
             type: string
             format: uuid
+        - in: query
+          name: startDateTime
+          required: false
+          schema:
+            type: string
+            format: datetime
+        - in: query
+          name: endDateTime
+          required: false
+          schema:
+            type: string
+            format: datetime
       responses:
         200:
           description: Return a list of money drawal

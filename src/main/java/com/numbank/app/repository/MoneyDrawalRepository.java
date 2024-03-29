@@ -77,7 +77,7 @@ public class MoneyDrawalRepository extends AutoCRUD<MoneyDrawal, Integer>{
         }
     }
 
-    public List<MoneyDrawal> findAllByAccountId(String id) {
+    public List<MoneyDrawal> findAllByAccountId(String id, String sql) {
         Connection connection = null;
         Statement statement = null;
         ResultSet resultSet = null;
@@ -85,10 +85,6 @@ public class MoneyDrawalRepository extends AutoCRUD<MoneyDrawal, Integer>{
         try {
             connection = ConnectionDB.createConnection();
             statement = connection.createStatement();
-
-            String sql = "SELECT mwd.* FROM \"account\" a INNER JOIN \"moneyWithDrawal\" mwd ON mwd.accountid = a.id " +
-                    "WHERE a.id = '" + id + "' " +
-                    "ORDER BY withDrawalDate DESC;";
 
             resultSet = statement.executeQuery(sql);
             List<MoneyDrawal> responseSQL = new ArrayList<>();

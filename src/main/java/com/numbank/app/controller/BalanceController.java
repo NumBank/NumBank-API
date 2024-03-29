@@ -8,6 +8,7 @@ import com.numbank.app.model.entity.MoneyDrawal;
 import com.numbank.app.service.BalanceHistoryService;
 import com.numbank.app.service.MoneyDrawalService;
 
+import jakarta.websocket.server.PathParam;
 import lombok.AllArgsConstructor;
 
 import java.util.List;
@@ -23,13 +24,21 @@ public class BalanceController {
     private MoneyDrawalService serviceMoneyDrawal;
 
     @GetMapping("/{accountid}")
-    public List<BalanceHistory> getBalanceHistory(@PathVariable("accountid") String accountid) {
-        return serviceBalance.getAllByAccountId(accountid);
+    public List<BalanceHistory> getBalanceHistory(
+        @PathVariable("accountid") String accountid,
+        @PathParam("startDateTime") String startDateTime,
+        @PathParam("endDateTime") String endDateTime
+        ) {
+        return serviceBalance.getAllByAccountId(accountid, startDateTime, endDateTime);
     }
 
     @GetMapping("/moneydrawal/{accountid}")
-    public List<MoneyDrawal> getMoneyDrawal(@PathVariable("accountid") String accountid) {
-        return serviceMoneyDrawal.getAllByAccountId(accountid);
+    public List<MoneyDrawal> getMoneyDrawal(
+        @PathVariable("accountid") String accountid,
+        @PathParam("startDateTime") String startDateTime,
+        @PathParam("endDateTime") String endDateTime
+        ) {
+        return serviceMoneyDrawal.getAllByAccountId(accountid, startDateTime, endDateTime);
     }
     
 }
