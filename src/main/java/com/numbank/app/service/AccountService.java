@@ -1,5 +1,6 @@
 package com.numbank.app.service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -36,16 +37,21 @@ public class AccountService {
             account.setId(UUID.randomUUID().toString());
             account.setDebt(false);
             account.setBalance(0.0);
-            repo.save(account);
-            balanceService.save(new BalanceHistory(0.0, account.getId()));
-        return account;
+
+        if ((LocalDate.now().getYear() - account.getBirthdate().getYear()) <= 21) {
+                System.out.println("Age non valide");
+            return null;
+        } else {
+                repo.save(account);
+                balanceService.save(new BalanceHistory(0.0, account.getId()));
+            return account;
+        }
     }
 
     public List<Account> saveAll(List<Account> accounts) {
         List<Account> allAccountsSaved = new ArrayList<>();
         for (Account account : accounts) {
-            save(account);
-            allAccountsSaved.add(account);
+            allAccountsSaved.add(save(account));
         }
         return allAccountsSaved;
     }
