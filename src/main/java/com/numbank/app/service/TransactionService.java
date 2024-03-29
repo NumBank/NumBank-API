@@ -40,7 +40,8 @@ public class TransactionService {
             transaction.setDateEffect(LocalDateTime.now());
             transaction.setSaveDate(LocalDateTime.now());
         }
-        return validateTransaction(transaction);
+        return repo.save(validateTransaction(transaction));
+        // return validateTransaction(transaction);
     }
 
     public List<Transaction> saveAll(List<Transaction> transactions) {
@@ -57,20 +58,45 @@ public class TransactionService {
 
     private Transaction validateTransaction(Transaction transaction) {
         Account account = accountService.getById(transaction.getAccountId());
-        Double balanceActually = account.getBalance();
+        Double balanceActuallyValue = account.getBalance();
+        MoneyDrawal moneyDrawalActually = moneyDrawalService.getMoneyDrawalByAccountIdNow(transaction.getAccountId());
+        Double moneyDrawalActuallyValue = 0.0;
 
-        if (balanceActually < transaction.getAmount() && transaction.getLabel().equals("DEBIT")) {
+        if (moneyDrawalActually != null)
+            moneyDrawalActuallyValue = moneyDrawalActually.getAmount();
+
+        if (balanceActuallyValue != null &&
+            balanceActuallyValue < transaction.getAmount() &&
+            transaction.getLabel().equals("DEBIT")) {
 
             if (account.getDebt()) {
-                System.out.println("Transaction success: account eligible to debt.");
-                moneyDrawalService.save(new MoneyDrawal((transaction.getAmount() - balanceActually), null, transaction.getAccountId()));
-                return repo.save(transaction);
+                Double restofMoneyDrawal = (moneyDrawalActuallyValue + (transaction.getAmount() - balanceActuallyValue));
+                moneyDrawalService.save(new MoneyDrawal(
+                    restofMoneyDrawal,
+                    null,
+                    transaction.getAccountId())
+                );
+
+                return transaction;
             }
 
             System.out.println("Transaction failed: balance not enough or account not eligible to debt");
             return null;
         }
 
-        return repo.save(transaction);
+        if (balanceActuallyValue != null &&
+            balanceActuallyValue < 0.0 &&
+            moneyDrawalActuallyValue != 0.0 &&
+            transaction.getLabel().equals("CREDIT")) {
+            Double restofMoneyDrawal = (transaction.getAmount() - moneyDrawalActuallyValue);
+
+            moneyDrawalService.save(new MoneyDrawal(
+                Math.abs(restofMoneyDrawal),
+                null,
+                transaction.getAccountId())
+            );
+        }
+
+        return transaction;
     }
 }
