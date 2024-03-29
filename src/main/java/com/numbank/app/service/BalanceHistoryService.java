@@ -29,7 +29,11 @@ public class BalanceHistoryService {
         return repo.save(balanceHistory);
     }
 
-    public Double getBalanceByAccountId(String id) {
+    public Double getBalanceByAccountIdNow(String id) {
         return repo.getBalanceNow(id).getValue();
+    }
+
+    public List<BalanceHistory> getAllByAccountId(String id) {
+        return repo.findAllByAccountId(id);
     }
 }

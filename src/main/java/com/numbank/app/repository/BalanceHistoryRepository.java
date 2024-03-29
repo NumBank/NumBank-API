@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
@@ -75,8 +77,7 @@ public class BalanceHistoryRepository extends AutoCRUD<BalanceHistory, String> {
         }
     }
 
-    @Override
-    public BalanceHistory save(BalanceHistory toSave) {
+    public List<BalanceHistory> findAllByAccountId(String id) {
         Connection connection = null;
         Statement statement = null;
         ResultSet resultSet = null;
@@ -85,10 +86,22 @@ public class BalanceHistoryRepository extends AutoCRUD<BalanceHistory, String> {
             connection = ConnectionDB.createConnection();
             statement = connection.createStatement();
 
-            String sql = "INSERT INTO balanceHistory (value, accountId) VALUES ("+ toSave.getValue() +", '"+ toSave.getAccountId() +"');";
+            String sql = "SELECT bh.* FROM \"account\" a INNER JOIN \"balancehistory\" bh ON bh.accountid = a.id " +
+                    "WHERE a.id = '" + id + "' " +
+                    "ORDER BY updatedatetime DESC;";
 
-            statement.executeUpdate(sql);
-            return toSave;
+            resultSet = statement.executeQuery(sql);
+            List<BalanceHistory> responseSQL = new ArrayList<>();
+
+            while (resultSet.next()) {
+                responseSQL.add(new BalanceHistory(
+                        resultSet.getInt("id"),
+                        resultSet.getDouble("value"),
+                        resultSet.getTimestamp("updatedatetime"),
+                        resultSet.getString("accountid")
+                ));
+            }
+            return responseSQL;
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
