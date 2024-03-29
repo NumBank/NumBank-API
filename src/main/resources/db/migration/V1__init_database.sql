@@ -50,3 +50,11 @@ CREATE TABLE IF NOT EXISTS "transfert" (
     accountIdSender UUID REFERENCES account(id),
     accountIdRecipient UUID REFERENCES account(id)
 );
+
+-- MONEY WITH DRAWAL
+CREATE TABLE IF NOT EXISTS "moneyWithDrawal" (
+    id SERIAL PRIMARY KEY,
+    amount DOUBLE PRECISION,
+    withDrawalDate TIMESTAMP DEFAULT current_timestamp,
+    accountId UUID REFERENCES account(id)
+);
