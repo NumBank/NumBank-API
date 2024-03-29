@@ -1,7 +1,7 @@
 openapi : 3.0.3
 info : 
   title : MyBank API
-  version : 2.1.1
+  version : 2.4.0
   description: |
     Project app for PROG4 cours by : 
     Fandresena (STD22058),
@@ -13,6 +13,7 @@ servers:
 tags:
   - name: Account
   - name: Transaction
+  - name: Balance
 paths:
 
   /accounts:
@@ -206,6 +207,52 @@ paths:
               schema:
                 $ref: '#/components/schemas/Transaction'
 
+  /balance/{accountid}:
+    get:
+      tags:
+        - "Balance"
+      summary: Get all balance about an account
+      operationId: getBalancesByAccountId
+      parameters:
+        - in: path
+          name: accountid
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        200:
+          description: Return a list of balance
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/BalanceHistory'
+
+  /balance/moneydrawal/{accountid}:
+    get:
+      tags:
+        - "Balance"
+      summary: Get all money drawal about an account
+      operationId: getMoneyDrawalsByAccountId
+      parameters:
+        - in: path
+          name: accountid
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        200:
+          description: Return a list of money drawal
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MoneyDrawal'
+
 components:
   schemas:
     CreateAccount:
@@ -332,19 +379,6 @@ components:
               format: uuid
         - allOf:
           $ref: '#/components/schemas/CreateTransfert'
-
-    BalanceHistory:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        balance:
-          type: number
-          format: double
-        dateTime:
-          type: string
-          format: datetime
     
     CreateCategory:
       type: object
@@ -359,7 +393,30 @@ components:
       allOf:
         - properties:
             id:
-              type: string
-              format: uuid
+              type: number
         - allOf:
           $ref: '#/components/schemas/CreateCategory'
+
+    BalanceHistory:
+      type: object
+      properties:
+        id:
+          type: number
+        balance:
+          type: number
+          format: double
+        dateTime:
+          type: string
+          format: date
+          
+    MoneyDrawal:
+      type: object
+      properties:
+        id:
+          type: number
+        amount:
+          type: number
+          format: double
+        withDrawalDate:
+          type: string
+          format: date
