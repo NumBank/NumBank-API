@@ -69,10 +69,15 @@ public class TransactionService {
             balanceActuallyValue < transaction.getAmount() &&
             transaction.getLabel().equals("DEBIT")) {
 
+            if (transaction.getAmount() <= (account.getNetSalary()/3)) {
+                System.out.println("Transaction failed: balance not enough");
+                return null;
+            }
+
             if (account.getDebt()) {
-                Double restofMoneyDrawal = (moneyDrawalActuallyValue + (transaction.getAmount() - balanceActuallyValue));
+                Double restOfMoneyDrawal = (moneyDrawalActuallyValue + (transaction.getAmount() - balanceActuallyValue));
                 moneyDrawalService.save(new MoneyDrawal(
-                    restofMoneyDrawal,
+                    restOfMoneyDrawal,
                     null,
                     transaction.getAccountId())
                 );
@@ -80,7 +85,7 @@ public class TransactionService {
                 return transaction;
             }
 
-            System.out.println("Transaction failed: balance not enough or account not eligible to debt");
+            System.out.println("Transaction failed: account not eligible to debt");
             return null;
         }
 
@@ -88,10 +93,10 @@ public class TransactionService {
             balanceActuallyValue < 0.0 &&
             moneyDrawalActuallyValue != 0.0 &&
             transaction.getLabel().equals("CREDIT")) {
-            Double restofMoneyDrawal = (transaction.getAmount() - moneyDrawalActuallyValue);
+            Double restOfMoneyDrawal = (transaction.getAmount() - moneyDrawalActuallyValue);
 
             moneyDrawalService.save(new MoneyDrawal(
-                Math.abs(restofMoneyDrawal),
+                Math.abs(restOfMoneyDrawal),
                 null,
                 transaction.getAccountId())
             );
