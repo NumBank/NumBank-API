@@ -45,8 +45,7 @@ public class BalanceHistoryRepository extends AutoCRUD<BalanceHistory, String> {
             connection = ConnectionDB.createConnection();
             statement = connection.createStatement();
 
-            String sql = "SELECT bh.* FROM \"account\" a INNER JOIN \"balancehistory\" bh ON bh.accountid = a.id " +
-                        "WHERE a.id = '" + id + "' " +
+            String sql = "SELECT * FROM \"balancehistory\" WHERE accountid = '" + id + "' " +
                         "ORDER BY updatedatetime DESC " +
                         "LIMIT 1;";
 
