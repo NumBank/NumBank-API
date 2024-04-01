@@ -9,7 +9,7 @@ import lombok.*;
 @NoArgsConstructor
 public class MoneyDrawal {
     private Integer id;
-    private Double amount;
+    private Double amount = 0.0;
     private Timestamp withDrawalDate;
     private String accountId;
 
