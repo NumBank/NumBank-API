@@ -29,7 +29,20 @@ public class MoneyDrawalService {
     }
 
     public MoneyDrawal getMoneyDrawalByAccountIdNow(String id) {
-        return repo.getByAccountIdNow(id);
+        MoneyDrawal moneyDrawal = repo.getByAccountIdNow(id);
+        if (moneyDrawal != null && moneyDrawal.getAmount() > 0.0) {
+            Integer timeInterest = LocalDateTime.now().getDayOfMonth() - moneyDrawal.getWithDrawalDate().toLocalDateTime().getDayOfMonth();
+            Double valueOfInterest = 0.0;
+
+            if (timeInterest < 7 && timeInterest > 0) {
+                valueOfInterest = moneyDrawal.getAmount() * 0.01;
+            } else if (timeInterest >= 7) {
+                valueOfInterest = moneyDrawal.getAmount() * 0.01 * (timeInterest - 6);
+            }
+            moneyDrawal.setAmount((moneyDrawal.getAmount() + valueOfInterest));
+            return moneyDrawal;
+        }
+        return new MoneyDrawal();
     }
 
     public List<MoneyDrawal> getAllByAccountId(String id, String startDateTime, String endDateTime) {
