@@ -1,5 +1,6 @@
 package com.numbank.app.service;
 
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -40,8 +41,7 @@ public class TransactionService {
             transaction.setDateEffect(LocalDateTime.now());
             transaction.setSaveDate(LocalDateTime.now());
         }
-        return repo.save(validateTransaction(transaction));
-        // return validateTransaction(transaction);
+        return validateTransaction(transaction);
     }
 
     public List<Transaction> saveAll(List<Transaction> transactions) {
@@ -69,13 +69,15 @@ public class TransactionService {
             balanceActuallyValue < transaction.getAmount() &&
             transaction.getLabel().equals("DEBIT")) {
 
-            if (transaction.getAmount() <= (account.getNetSalary()/3)) {
+            if (transaction.getAmount() > (account.getNetSalary()/3)) {
                 System.out.println("Transaction failed: balance not enough");
                 return null;
             }
 
             if (account.getDebt()) {
                 Double restOfMoneyDrawal = (moneyDrawalActuallyValue + (transaction.getAmount() - balanceActuallyValue));
+                repo.save(transaction);
+
                 moneyDrawalService.save(new MoneyDrawal(
                     restOfMoneyDrawal,
                     null,
@@ -93,13 +95,13 @@ public class TransactionService {
             balanceActuallyValue < 0.0 &&
             moneyDrawalActuallyValue != 0.0 &&
             transaction.getLabel().equals("CREDIT")) {
-            Double restOfMoneyDrawal = (transaction.getAmount() - moneyDrawalActuallyValue);
-
-            moneyDrawalService.save(new MoneyDrawal(
-                Math.abs(restOfMoneyDrawal),
-                null,
-                transaction.getAccountId())
-            );
+            double restOfMoneyDrawal = (transaction.getAmount() - moneyDrawalActuallyValue);
+            MoneyDrawal moneyDrawalToSaved = new MoneyDrawal(0.0, Timestamp.valueOf(LocalDateTime.now().plusSeconds(2)), transaction.getAccountId());
+                if (restOfMoneyDrawal <= 0) {
+                    moneyDrawalToSaved.setAmount(Math.abs(restOfMoneyDrawal));
+                }
+            repo.save(transaction);
+            moneyDrawalService.save(moneyDrawalToSaved);
         }
 
         return transaction;
