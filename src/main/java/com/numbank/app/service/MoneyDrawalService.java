@@ -28,7 +28,11 @@ public class MoneyDrawalService {
         return repo.save(moneyDrawal);
     }
 
-    public MoneyDrawal getMoneyDrawalByAccountIdNow(String id) {
+    public  MoneyDrawal getMoneyDrawalByAccountIdNow(String id) {
+        return repo.getByAccountIdNow(id);
+    }
+
+    public MoneyDrawal getMoneyDrawalByAccountIdNowWithInterest(String id) {
         MoneyDrawal moneyDrawal = repo.getByAccountIdNow(id);
         if (moneyDrawal != null && moneyDrawal.getAmount() > 0.0) {
             Integer timeInterest = LocalDateTime.now().getDayOfMonth() - moneyDrawal.getWithDrawalDate().toLocalDateTime().getDayOfMonth();
