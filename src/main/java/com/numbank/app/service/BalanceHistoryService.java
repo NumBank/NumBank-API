@@ -3,12 +3,12 @@ package com.numbank.app.service;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import com.numbank.app.model.entity.MoneyDrawal;
-import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -40,8 +40,8 @@ public class BalanceHistoryService {
     public Double getBalanceByAccountIdNow(String id) {
         BalanceHistory balanceHistory = repo.getBalanceNow(id);
         MoneyDrawal moneyDrawal = serviceMoneyDrawal.getMoneyDrawalByAccountIdNow(id);
-        if (moneyDrawal != null && moneyDrawal.getAmount() > Math.abs(balanceHistory.getValue())) {
-            balanceHistory.setValue(-moneyDrawal.getAmount());
+        if (moneyDrawal != null && moneyDrawal.getAmount() != 0.0) {
+            balanceHistory.setValue(-(-balanceHistory.getValue() + (moneyDrawal.getAmount() * getValueOfInterest(moneyDrawal))));
             return balanceHistory.getValue();
         }
         return balanceHistory.getValue();
@@ -97,18 +97,13 @@ public class BalanceHistoryService {
     }
 
     private Double getValueOfInterest(MoneyDrawal moneyDrawal) {
-        /*
-         Day of different month fix it
-         -----------------------------
-         -----------------------------
-         */
-        Integer timeInterest = LocalDateTime.now().getDayOfMonth() - moneyDrawal.getWithDrawalDate().toLocalDateTime().getDayOfMonth();
+        long timeInterest = ChronoUnit.DAYS.between(moneyDrawal.getWithDrawalDate().toLocalDateTime(), LocalDateTime.now());
         Double valueOfInterest = 0.01;
 
         if (timeInterest < 7 && timeInterest > 0) {
             valueOfInterest = moneyDrawal.getAmount() * 0.01;
         } else if (timeInterest >= 7) {
-            valueOfInterest = moneyDrawal.getAmount() * 0.01 * (timeInterest - 6);
+            valueOfInterest = moneyDrawal.getAmount() * 0.01 * (timeInterest - 7);
         }
         return valueOfInterest;
     }
