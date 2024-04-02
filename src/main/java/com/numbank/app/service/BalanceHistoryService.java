@@ -2,7 +2,6 @@ package com.numbank.app.service;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.HashMap;
 import java.util.List;
@@ -39,7 +38,7 @@ public class BalanceHistoryService {
 
     public Double getBalanceByAccountIdNow(String id) {
         BalanceHistory balanceHistory = repo.getBalanceNow(id);
-        MoneyDrawal moneyDrawal = serviceMoneyDrawal.getMoneyDrawalByAccountIdNow(id);
+        MoneyDrawal moneyDrawal = serviceMoneyDrawal.getMoneyDrawalByAccountIdNowWithInterest(id);
         if (moneyDrawal != null && moneyDrawal.getAmount() != 0.0) {
             balanceHistory.setValue(-(-balanceHistory.getValue() + (moneyDrawal.getAmount() * getValueOfInterest(moneyDrawal))));
             return balanceHistory.getValue();
@@ -48,7 +47,6 @@ public class BalanceHistoryService {
     }
 
     public List<BalanceHistory> getAllByAccountId(String id, String startDateTime, String endDateTime) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         String sql;
 
         if (startDateTime == null || endDateTime == null) {
@@ -56,9 +54,6 @@ public class BalanceHistoryService {
                 "WHERE a.id = '" + id + "' " +
                 "ORDER BY updatedatetime DESC ;";
         } else {
-            LocalDateTime startDateTimeF = LocalDateTime.parse(startDateTime, formatter);
-            LocalDateTime endDateTimeF = LocalDateTime.parse(endDateTime, formatter);
-
             sql = "SELECT bh.* FROM \"account\" a INNER JOIN \"balancehistory\" bh ON bh.accountid = a.id " +
                 "WHERE a.id = '" + id + "' " +
                 "AND updatedatetime BETWEEN '" + startDateTime + "' AND '" + endDateTime + "' " +
@@ -74,12 +69,12 @@ public class BalanceHistoryService {
         Double loan = 0.0;
         Double loanInterest = 0.01;
 
-        MoneyDrawal moneyDrawal =  serviceMoneyDrawal.getMoneyDrawalByAccountIdNow(accountId);
+        MoneyDrawal moneyDrawal =  serviceMoneyDrawal.getMoneyDrawalByAccountIdNowWithInterest(accountId);
         if (moneyDrawal.getAmount() != 0.0) {
             Double valueOfInterest = getValueOfInterest(moneyDrawal);
-            loan = moneyDrawal.getAmount() * valueOfInterest;
+            loan = moneyDrawal.getAmount();
             loanInterest = valueOfInterest;
-            balance = getBalanceByAccountIdNow(accountId) +(-loan);
+            balance = getBalanceByAccountIdNow(accountId);
         }
 
         balanceData.put("balance", balance);
