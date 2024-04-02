@@ -1,10 +1,18 @@
 package com.numbank.app.service;
 
+import java.math.BigDecimal;
+import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
+import com.numbank.app.model.entity.Account;
+import com.numbank.app.repository.AccountRepository;
+import com.numbank.app.repository.AutorizationOpenRepository;
+import org.flywaydb.core.internal.jdbc.JdbcTemplate;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.numbank.app.model.entity.Transaction;
