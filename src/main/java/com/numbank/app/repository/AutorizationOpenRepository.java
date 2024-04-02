@@ -1,6 +1,7 @@
 package com.numbank.app.repository;
 
 import com.numbank.app.config.ConnectionDB;
+import com.numbank.app.model.AutoCRUD;
 import com.numbank.app.model.entity.AuthorisationOpen;
 import org.springframework.stereotype.Repository;
 
@@ -12,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Repository
-public class AutorizationOpenRepository extends AutoCRUD<AutorizationOpen, Integer> {
+public class AutorizationOpenRepository extends AutoCRUD<AuthorisationOpen, Integer> {
 
     protected String getTableName() {
         return "autorizationopen";
