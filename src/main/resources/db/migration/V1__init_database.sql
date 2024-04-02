@@ -18,11 +18,24 @@ CREATE TABLE IF NOT EXISTS "balancehistory" (
     accountId UUID REFERENCES account(id)
 );
 
+-- SUPPLY
+CREATE TABLE IF NOT EXISTS "supply" (
+    id UUID PRIMARY KEY,
+    amount DOUBLE PRECISION,
+    label TEXT,
+    dateEffect TIMESTAMP DEFAULT current_timestamp,
+    saveDate TIMESTAMP DEFAULT current_timestamp,
+    extern BOOLEAN DEFAULT false,
+    status BOOLEAN DEFAULT false,
+    accountId UUID REFERENCES account(id)
+);
+
 -- CATEGORY
 CREATE TABLE IF NOT EXISTS "category" (
-    id SERIAL PRIMARY KEY,
+    id UUID PRIMARY KEY,
     name VARCHAR(200),
-    type VARCHAR(200)
+    type VARCHAR(200),
+    idSupply UUID REFERENCES supply(id)
 );
 
 -- TRANSACTION
@@ -58,7 +71,7 @@ CREATE TABLE IF NOT EXISTS "moneywithdrawal" (
     withDrawalDate TIMESTAMP DEFAULT current_timestamp,
     accountId UUID REFERENCES account(id)
 );
-
+/*
 -- AUTORIZATION OPEN
 CREATE TABLE IF NOT EXISTS "AutorizationOpen"(
     id SERIAL PRIMARY KEY,
@@ -81,4 +94,4 @@ CREATE TABLE IF NOT EXISTS "CategorizationOperation" (
     comment TEXT,
     idOperation INT REFERENCES Operation(id),
     idCategory INT REFERENCES Category(id)
-);
+);*/
