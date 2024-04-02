@@ -3,6 +3,8 @@ package com.numbank.app.controller;
 import com.numbank.app.model.entity.Category;
 import com.numbank.app.service.CategoryService;
 import lombok.AllArgsConstructor;
+
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -14,6 +16,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/categories")
 @AllArgsConstructor
+@CrossOrigin(origins = "http://localhost:3000")
 public class CategoryController {
     CategoryService service;
 

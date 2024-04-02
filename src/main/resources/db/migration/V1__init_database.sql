@@ -92,6 +92,10 @@ CREATE TABLE IF NOT EXISTS "Operation"(
 CREATE TABLE IF NOT EXISTS "CategorizationOperation" (
     id SERIAL PRIMARY KEY,
     comment TEXT,
-    idOperation INT REFERENCES Operation(id),
+    idOperation INT REFERENCES "Operation"(id),
     idCategory INT REFERENCES Category(id)
+<<<<<<< HEAD
 );*/
+=======
+);
+>>>>>>> 6dd0bf9a774e8ca6eb97189d6a613f6d97e23450

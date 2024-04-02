@@ -145,7 +145,7 @@ public class TransactionService {
                 valueDebit = transaction.getAmount();
 
             statement.put("Date", transaction.getDateEffect().toLocalDate().toString().replace('-', '/'));
-            statement.put("Ref", "VIR_".concat(transaction.getSaveDate().toLocalDate().toString().replace('-', '_')));
+            statement.put("Reference", "VIR_".concat(transaction.getSaveDate().toLocalDate().toString().replace('-', '_')));
             statement.put("Motif", categoryService.getById(transaction.getCategoryId()).getName());
             statement.put("Credit MGA", valueCredit);
             statement.put("Debit MGA", valueDebit);

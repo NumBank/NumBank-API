@@ -42,9 +42,9 @@ public class BalanceHistoryService {
         MoneyDrawal moneyDrawal = serviceMoneyDrawal.getMoneyDrawalByAccountIdNowWithInterest(id);
         if (moneyDrawal != null && moneyDrawal.getAmount() != 0.0) {
             balanceHistory.setValue(-(-balanceHistory.getValue() + (moneyDrawal.getAmount() * getValueOfInterest(moneyDrawal))));
-            return balanceHistory.getValue();
+            return (double) (Math.round(balanceHistory.getValue() * 100.0) / 100.0);
         }
-        return balanceHistory.getValue();
+        return (double) (Math.round(balanceHistory.getValue() * 100.0) / 100.0);
     }
 
     public List<BalanceHistory> getAllByAccountId(String id, String startDateTime, String endDateTime) {
@@ -66,16 +66,15 @@ public class BalanceHistoryService {
     public String getAllBalance(String accountId) {
         ObjectMapper mapper = new ObjectMapper();
         Map<String, Double> balanceData = new HashMap<>();
-        Double balance = 0.0;
+        Double balance = getBalanceByAccountIdNow(accountId);
         Double loan = 0.0;
-        Double loanInterest = 0.01;
+        Double loanInterest = 0.0;
 
         MoneyDrawal moneyDrawal =  serviceMoneyDrawal.getMoneyDrawalByAccountIdNowWithInterest(accountId);
         if (moneyDrawal.getAmount() != 0.0) {
             Double valueOfInterest = getValueOfInterest(moneyDrawal);
             loan = moneyDrawal.getAmount();
             loanInterest = valueOfInterest;
-            balance = getBalanceByAccountIdNow(accountId);
         }
 
         balanceData.put("balance", balance);

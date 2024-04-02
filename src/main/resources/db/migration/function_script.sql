@@ -140,25 +140,23 @@ FROM
         SELECT
             accountIdSender AS idCompte,
             label AS motif,
-            DateEffet,
+            "transfert".dateeffect,
             Amount,
             LAG(SoldePrincipal, 1, 0) OVER (PARTITION BY accountIdSender ORDER BY DateEffet) AS SoldePrincipal
         FROM
-            "Transfert"
+            "transfert"
         WHERE
             amount > 0
-
         UNION ALL
-
         -- Select debit operations
         SELECT
             accountIdRecipient AS idCompte,
             label,
-            dateEffect,
+            "transfert".dateeffect,
             amount,
             LAG(SoldePrincipal, 1, 0) OVER (PARTITION BY accountIdRecipient ORDER BY dateEffect) AS SoldePrincipal
         FROM
-            "Transfert"
+            "transfert"
         WHERE
             amount < 0
     ) AS Operations;
@@ -199,16 +197,21 @@ $$ LANGUAGE plpgsql;
 
 -- F2
 -- For the 1st chart (pie-chart) : Sum of amounts per category
-SELECT c.Name AS category, SUM(o.amount) AS SumOfAmount
-FROM categorizeOperation co
-         JOIN Category c ON co.idCategorie = c.id
-         JOIN Operation o ON co.idOperation = o.id
-WHERE o.dateEffect BETWEEN :startDate AND :endDate
-GROUP BY c.Name;
+SELECT
+    c.name AS category,
+    DATE_TRUNC('month', t.dateEffect) AS period,
+    SUM(s.amount) AS sumOfAmountSupply,
+    SUM(t.amount) AS sumOfAmountTransfert
+FROM "category" c
+         INNER JOIN "supply" s ON c.id = s.id
+         INNER JOIN "account" a ON a.id = s.id
+         INNER JOIN "transfert" t ON t.id = s.id
+WHERE t.dateEffect BETWEEN '2024-01-01' AND '2024-12-31'
+GROUP BY c.name, DATE_TRUNC('month', t.dateEffect);
 
 -- For the 2nd chart (chart of your choice) : Sum of expenses and income
 SELECT
     SUM(CASE WHEN o.amount < 0 THEN o.amount ELSE 0 END) AS totalExpenses,
     SUM(CASE WHEN o.amount >= 0 THEN o.amount ELSE 0 END) AS totalIncome
-FROM Operation o
+FROM "Operation" o
 WHERE o.dateEffect BETWEEN :startDate AND :endDate;
