@@ -5,7 +5,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import com.numbank.app.service.AccountService;
-import com.numbank.app.service.BalanceHistoryService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Repository;
 
