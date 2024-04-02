@@ -1,7 +1,7 @@
 openapi : 3.0.3
 info : 
   title : MyBank API
-  version : 2.5.1
+  version : 4.1.0
   description: |
     Project app for PROG4 cours by : 
     Fandresena (STD22058),
@@ -14,6 +14,7 @@ tags:
   - name: Account
   - name: Transaction
   - name: Balance
+  - name: Category
 paths:
 
   /accounts:
@@ -124,7 +125,7 @@ paths:
       operationId: getTransactionByAccountId
       parameters:
         - in: path
-          name: id
+          name: accountId
           required: true
           schema:
             type: string
@@ -222,11 +223,33 @@ paths:
               schema:
                 $ref: '#/components/schemas/Transaction'
 
+  /transactions/statements/{accountid}:
+    get:
+      tags:
+        - "Transaction"
+      summary: Get statements about an account
+      operationId: getStatements
+      parameters:
+        - in: path
+          name: accountId
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Return list of statements
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Statements'
+
   /balance/{accountid}:
     get:
       tags:
         - "Balance"
-      summary: Get all balance about an account
+      summary: Get info balance about an account
       operationId: getAllBalanceByAccountId
       parameters:
         - in: path
@@ -334,6 +357,42 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/MoneyDrawal'
+
+  /categories:
+    get:
+      tags:
+        - "Category"
+      summary: Get all Categories
+      operationId: getCategoriess
+      responses:
+        200:
+          description: Return list of category
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Category'
+
+    post:
+      tags:
+        - "Category"
+      summary: Create Categories
+      operationId: createCategories
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateCategory'
+      responses:
+        200:
+          description: Return an/list account(s) created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Category'
+
+
 
 components:
   schemas:
@@ -502,3 +561,22 @@ components:
         withDrawalDate:
           type: string
           format: date
+    Statements:
+      type: object
+      properties:
+        Reference:
+          type: string
+        Solde:
+          type: number
+          format: double
+        Debit MGA:
+          type: number
+          format: double
+        Credit MGA:
+          type: number
+          format: double
+        Date:
+          type: string
+          format: date
+        Motif:
+          type: string

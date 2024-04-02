@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import com.numbank.app.service.AccountService;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import com.numbank.app.config.ConnectionDB;
@@ -11,9 +13,10 @@ import com.numbank.app.model.AutoCRUD;
 import com.numbank.app.model.entity.Transaction;
 
 @Repository
+@AllArgsConstructor
 public class TransactionRepository extends AutoCRUD<Transaction, String>{
     private final Connection connection = ConnectionDB.createConnection();
-    private BalanceHistoryRepository balanceRepo = new BalanceHistoryRepository();
+    private final AccountService accountService;
     
     @Override
     protected String getTableName() {
@@ -50,7 +53,7 @@ public class TransactionRepository extends AutoCRUD<Transaction, String>{
                     "BEGIN" +
                     "   BEGIN" +
                     "       INSERT INTO balancehistory (value, accountId) VALUES " +
-                    "           ( (" + balanceRepo.getBalanceNow(toSave.getAccountId()).getValue() + " - " + toSave.getAmount() + "), " +
+                    "           ( (" + accountService.getById(toSave.getAccountId()).getBalance() + " - " + toSave.getAmount() + "), " +
                     "              '" + toSave.getAccountId() + "' );" +
                     "       INSERT INTO \"transaction\" (id, label, amount, accountId,  categoryId) VALUES " +
                     "           ('"+ toSave.getId() +"', '" + toSave.getLabel() + "', " + toSave.getAmount() + ", '" + toSave.getAccountId() + "', " + toSave.getCategoryId() + ");" +
@@ -68,7 +71,7 @@ public class TransactionRepository extends AutoCRUD<Transaction, String>{
                     "BEGIN" +
                     "   BEGIN" +
                     "       INSERT INTO balancehistory (value, accountId) VALUES " +
-                    "           ( (" + balanceRepo.getBalanceNow(toSave.getAccountId()).getValue() + " + " + toSave.getAmount() + "), " +
+                    "           ( (" + accountService.getById(toSave.getAccountId()).getBalance() + " + " + toSave.getAmount() + "), " +
                     "            '" + toSave.getAccountId() + "' );" +
                     "       INSERT INTO \"transaction\" (id, label, amount, accountId, categoryId) VALUES " +
                     "           ('"+ toSave.getId() +"', '" + toSave.getLabel() + "', " + toSave.getAmount() + ", '" + toSave.getAccountId() + "', " + toSave.getCategoryId() + ");" +

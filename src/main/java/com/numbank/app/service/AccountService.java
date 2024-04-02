@@ -21,7 +21,11 @@ public class AccountService {
 
     public Account getById(String id) {
         Account account = repo.getById(id);
-        account.setBalance(balanceService.getBalanceByAccountIdNow(id));
+        if (account == null) {
+            return null;
+        } else {
+            account.setBalance(balanceService.getBalanceByAccountIdNow(id));
+        }
         return account;
     }
 
@@ -34,12 +38,11 @@ public class AccountService {
     }
 
     public Account save(Account account) {
-            account.setId(UUID.randomUUID().toString());
-            account.setDebt(false);
-            account.setBalance(0.0);
+        account.setId(UUID.randomUUID().toString());
+        account.setDebt(false);
+        account.setBalance(0.0);
 
         if ((LocalDate.now().getYear() - account.getBirthdate().getYear()) <= 21) {
-                System.out.println("Age non valide");
             return null;
         } else {
                 repo.save(account);
