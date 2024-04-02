@@ -58,3 +58,27 @@ CREATE TABLE IF NOT EXISTS "moneywithdrawal" (
     withDrawalDate TIMESTAMP DEFAULT current_timestamp,
     accountId UUID REFERENCES account(id)
 );
+
+-- AUTORIZATION OPEN
+CREATE TABLE IF NOT EXISTS "AutorizationOpen"(
+    id SERIAL PRIMARY KEY,
+    approveCredit DOUBLE PRECISION,
+    idAccount UUID REFERENCES Account(id)
+);
+
+-- OPERATION
+CREATE TABLE IF NOT EXISTS "Operation"(
+    id SERIAL PRIMARY KEY,
+    amount DOUBLE PRECISION,
+    dateEffect TIMESTAMP,
+    startDate TIMESTAMP,
+    endDate TIMESTAMP
+);
+
+-- CATEGORIZATION OPERATION
+CREATE TABLE IF NOT EXISTS "CategorizationOperation" (
+    id SERIAL PRIMARY KEY,
+    comment TEXT,
+    idOperation INT REFERENCES Operation(id),
+    idCategory INT REFERENCES Category(id)
+);
