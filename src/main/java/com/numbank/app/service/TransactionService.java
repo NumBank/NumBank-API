@@ -37,6 +37,12 @@ public class TransactionService {
     
     public Transaction save(Transaction transaction) {
         transaction.setId(UUID.randomUUID().toString());
+        Account account = accountService.getById(transaction.getAccountId());
+        if (account == null) {
+            System.out.println("Account (with id=" + transaction.getAccountId() + ") not exist");
+            return null;
+        }
+
         if (transaction.getDateEffect() == null && transaction.getSaveDate() == null) {
             transaction.setDateEffect(LocalDateTime.now());
             transaction.setSaveDate(LocalDateTime.now());
@@ -66,15 +72,18 @@ public class TransactionService {
             moneyDrawalActuallyValue = moneyDrawalActually.getAmount();
 
         if (balanceActuallyValue != null &&
-            balanceActuallyValue < transaction.getAmount() &&
-            transaction.getLabel().equals("DEBIT")) {
+            transaction.getLabel().equals("DEBIT")
+            ) {
 
-            if (transaction.getAmount() > (account.getNetSalary()/3)) {
-                System.out.println("Transaction failed: balance not enough");
+            if (balanceActuallyValue < transaction.getAmount() &&
+                transaction.getAmount() > (account.getNetSalary()/3) ||
+                moneyDrawalActuallyValue > (account.getNetSalary()/3)
+                ) {
+                System.out.println("Transaction failed: balance not enough for account with id=" + account.getNumber());
                 return null;
             }
 
-            if (account.getDebt()) {
+            if (balanceActuallyValue < transaction.getAmount() && account.getDebt()) {
                 Double restOfMoneyDrawal = (moneyDrawalActuallyValue + (transaction.getAmount() - balanceActuallyValue));
                 repo.save(transaction);
 
@@ -83,12 +92,16 @@ public class TransactionService {
                     null,
                     transaction.getAccountId())
                 );
+                return transaction;
 
+            } else if (balanceActuallyValue < transaction.getAmount() && !account.getDebt()) {
+                System.out.println("Transaction failed: account with number=" + account.getNumber() + " not eligible to debt");
+                return null;
+
+            } else {
+                repo.save(transaction);
                 return transaction;
             }
-
-            System.out.println("Transaction failed: account not eligible to debt");
-            return null;
         }
 
         if (balanceActuallyValue != null &&
@@ -102,6 +115,11 @@ public class TransactionService {
                 }
             repo.save(transaction);
             moneyDrawalService.save(moneyDrawalToSaved);
+        }
+
+        if (moneyDrawalActuallyValue == 0.0 &&
+            transaction.getLabel().equals("CREDIT")) {
+            repo.save(transaction);
         }
 
         return transaction;
