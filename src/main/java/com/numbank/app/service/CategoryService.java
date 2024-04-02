@@ -23,6 +23,13 @@ public class CategoryService {
     }
 
     public Category save(Category category) {
+        List<Category> allCategories = repo.findAll();
+        for (Category category2 : allCategories) {
+            if (category.equals(category2)) {
+                System.out.println("Category already exists");
+                return null;
+            }       
+        }
         return repo.save(category);
     }
 
