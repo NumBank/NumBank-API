@@ -77,6 +77,49 @@ public class BalanceHistoryRepository extends AutoCRUD<BalanceHistory, String> {
         }
     }
 
+
+    public BalanceHistory getBalanceBetweenTwoDate(String id, String date) {
+        Connection connection = null;
+        Statement statement = null;
+        ResultSet resultSet = null;
+
+        try {
+            connection = ConnectionDB.createConnection();
+            statement = connection.createStatement();
+
+            String sql = "SELECT * FROM \"balancehistory\" WHERE accountid = '" + id + "' " +
+                    "AND updatedatetime <= '" + date + "' " +
+                    "ORDER BY updatedatetime DESC " +
+                    "LIMIT 1;";
+
+            resultSet = statement.executeQuery(sql);
+            BalanceHistory responseSQL = null;
+
+            while (resultSet.next()) {
+                responseSQL = new BalanceHistory(
+                        resultSet.getInt("id"),
+                        resultSet.getDouble("value"),
+                        resultSet.getTimestamp("updatedatetime"),
+                        resultSet.getString("accountid")
+                );
+            }
+            return responseSQL;
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+
+        } finally {
+            try {
+                if (resultSet != null) resultSet.close();
+                if (statement != null) statement.close();
+                if (connection != null) connection.close();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+
     public List<BalanceHistory> findAllByAccountId(String id, String sql) {
         Connection connection = null;
         Statement statement = null;

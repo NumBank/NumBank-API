@@ -1,6 +1,7 @@
 package com.numbank.app.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -58,5 +59,10 @@ public class TransactionController {
     @PutMapping({"/{id}"})
     public Transaction updateTransaction(@PathVariable String id, @RequestBody Transaction transaction) {
         return serviceTransaction.update(transaction);
+    }
+
+    @GetMapping({"/statements/{id}"})
+    public List<Map<String, Object>> accountStatements(@PathVariable("id") String id) {
+        return serviceTransaction.accountStatements(id);
     }
 }

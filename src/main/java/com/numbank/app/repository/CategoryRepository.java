@@ -11,7 +11,7 @@ import com.numbank.app.model.AutoCRUD;
 import com.numbank.app.model.entity.Category;
 
 @Repository
-public class CategoryRepository extends AutoCRUD<Category, String>{
+public class CategoryRepository extends AutoCRUD<Category, Integer>{
     private final Connection connection = ConnectionDB.createConnection();
     
     @Override

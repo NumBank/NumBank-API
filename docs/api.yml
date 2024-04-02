@@ -1,7 +1,7 @@
 openapi : 3.0.3
 info : 
   title : MyBank API
-  version : 3.2.0
+  version : 4.1.0
   description: |
     Project app for PROG4 cours by : 
     Fandresena (STD22058),
@@ -125,7 +125,7 @@ paths:
       operationId: getTransactionByAccountId
       parameters:
         - in: path
-          name: id
+          name: accountId
           required: true
           schema:
             type: string
@@ -222,6 +222,28 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Transaction'
+
+  /transactions/statements/{accountid}:
+    get:
+      tags:
+        - "Transaction"
+      summary: Get statements about an account
+      operationId: getStatements
+      parameters:
+        - in: path
+          name: accountId
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Return list of statements
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Statements'
 
   /balance/{accountid}:
     get:
@@ -539,3 +561,22 @@ components:
         withDrawalDate:
           type: string
           format: date
+    Statements:
+      type: object
+      properties:
+        Reference:
+          type: string
+        Solde:
+          type: number
+          format: double
+        Debit MGA:
+          type: number
+          format: double
+        Credit MGA:
+          type: number
+          format: double
+        Date:
+          type: string
+          format: date
+        Motif:
+          type: string

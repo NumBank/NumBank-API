@@ -2,10 +2,9 @@ package com.numbank.app.service;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
+import com.numbank.app.model.entity.BalanceHistory;
 import org.springframework.stereotype.Service;
 
 import com.numbank.app.model.entity.Account;
@@ -20,7 +19,9 @@ import lombok.AllArgsConstructor;
 public class TransactionService {
     private TransactionRepository repo;
     private AccountService accountService;
+    private BalanceHistoryService balanceHistoryService;
     private MoneyDrawalService moneyDrawalService;
+    private CategoryService categoryService;
 
     public Transaction getById(String id) {
         return repo.getById(id);
@@ -59,7 +60,8 @@ public class TransactionService {
     }
     
     public Transaction update(Transaction transaction) {
-        return repo.update(transaction);
+        // return repo.update(transaction);
+        return transaction;
     }
 
     private Transaction validateTransaction(Transaction transaction) {
@@ -123,5 +125,36 @@ public class TransactionService {
         }
 
         return transaction;
+    }
+
+    public List<Map<String, Object>> accountStatements(String id) {
+        List<Map<String, Object>> allStatements = new ArrayList<>();
+        List<Transaction> transactionList = getByAccountId(id);
+
+        for (Transaction transaction : transactionList) {
+            Map<String, Object> statement = new HashMap<>();
+
+            Double valueCredit = 0.0;
+            Double valueDebit = 0.0;
+            LocalDateTime date = transaction.getSaveDate();
+            BalanceHistory balanceHistory = balanceHistoryService.getBalanceBetweenTwoDate(transaction.getAccountId(), date);
+
+            if (Objects.equals(transaction.getLabel(), "CREDIT"))
+                valueCredit = transaction.getAmount();
+            if (Objects.equals(transaction.getLabel(), "DEBIT"))
+                valueDebit = transaction.getAmount();
+
+            statement.put("Date", transaction.getDateEffect().toLocalDate().toString().replace('-', '/'));
+            statement.put("Ref", "VIR_".concat(transaction.getSaveDate().toLocalDate().toString().replace('-', '_')));
+            statement.put("Motif", categoryService.getById(transaction.getCategoryId()).getName());
+            statement.put("Credit MGA", valueCredit);
+            statement.put("Debit MGA", valueDebit);
+            statement.put("Solde", balanceHistory.getValue());
+
+            allStatements.add(statement);
+
+        }
+
+        return allStatements;
     }
 }

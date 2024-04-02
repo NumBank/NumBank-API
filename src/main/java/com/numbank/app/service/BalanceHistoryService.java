@@ -2,6 +2,7 @@ package com.numbank.app.service;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.HashMap;
 import java.util.List;
@@ -89,6 +90,12 @@ public class BalanceHistoryService {
         }
 
         return json;
+    }
+
+    public BalanceHistory getBalanceBetweenTwoDate(String accountId, LocalDateTime date) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        String dateF = date.format(formatter);
+        return repo.getBalanceBetweenTwoDate(accountId, dateF);
     }
 
     private Double getValueOfInterest(MoneyDrawal moneyDrawal) {

@@ -14,7 +14,7 @@ import lombok.AllArgsConstructor;
 public class CategoryService {
     private CategoryRepository repo;
 
-    public Category getById(String id) {
+    public Category getById(Integer id) {
         return repo.getById(id);
     }
 
