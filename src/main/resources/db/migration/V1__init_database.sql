@@ -79,6 +79,6 @@ CREATE TABLE IF NOT EXISTS "Operation"(
 CREATE TABLE IF NOT EXISTS "CategorizationOperation" (
     id SERIAL PRIMARY KEY,
     comment TEXT,
-    idOperation INT REFERENCES Operation(id),
+    idOperation INT REFERENCES "Operation"(id),
     idCategory INT REFERENCES Category(id)
 );

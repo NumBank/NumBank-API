@@ -140,25 +140,23 @@ FROM
         SELECT
             accountIdSender AS idCompte,
             label AS motif,
-            DateEffet,
+            "transfert".dateeffect,
             Amount,
             LAG(SoldePrincipal, 1, 0) OVER (PARTITION BY accountIdSender ORDER BY DateEffet) AS SoldePrincipal
         FROM
-            "Transfert"
+            "transfert"
         WHERE
             amount > 0
-
         UNION ALL
-
         -- Select debit operations
         SELECT
             accountIdRecipient AS idCompte,
             label,
-            dateEffect,
+            "transfert".dateeffect,
             amount,
             LAG(SoldePrincipal, 1, 0) OVER (PARTITION BY accountIdRecipient ORDER BY dateEffect) AS SoldePrincipal
         FROM
-            "Transfert"
+            "transfert"
         WHERE
             amount < 0
     ) AS Operations;
@@ -210,5 +208,5 @@ GROUP BY c.Name;
 SELECT
     SUM(CASE WHEN o.amount < 0 THEN o.amount ELSE 0 END) AS totalExpenses,
     SUM(CASE WHEN o.amount >= 0 THEN o.amount ELSE 0 END) AS totalIncome
-FROM Operation o
+FROM "Operation" o
 WHERE o.dateEffect BETWEEN :startDate AND :endDate;
