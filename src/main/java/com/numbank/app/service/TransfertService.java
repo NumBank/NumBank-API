@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import com.numbank.app.model.entity.Account;
 import org.springframework.stereotype.Service;
 
 import com.numbank.app.model.entity.Transaction;
@@ -18,6 +19,7 @@ import lombok.AllArgsConstructor;
 public class TransfertService {
     private TransfertRepository repo;
     private TransactionService transactionService;
+    private AccountService accountService;
 
     public Transfert getById(String id) {
         return repo.getById(id);
@@ -64,6 +66,12 @@ public class TransfertService {
         List<Transfert> savedList = new ArrayList<>();
 
         for (Transfert transfert : transferts) {
+            Account accountSender = accountService.getById(transfert.getAccountIdSender());
+
+            if (accountSender.getBalance() < transfert.getAmount()) {
+                System.out.println("Transfer failed: balance not enough for account with number="+ accountSender.getNumber());
+                return null;
+            }
             savedList.add(save(transfert));
 
             transactionService.save(new Transaction(
