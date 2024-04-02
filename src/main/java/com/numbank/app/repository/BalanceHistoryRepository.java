@@ -15,6 +15,7 @@ import com.numbank.app.model.entity.BalanceHistory;
 
 @Repository
 public class BalanceHistoryRepository extends AutoCRUD<BalanceHistory, String> {
+    private final Connection connection = ConnectionDB.createConnection();
     
     @Override
     protected String getTableName() {
@@ -110,5 +111,19 @@ public class BalanceHistoryRepository extends AutoCRUD<BalanceHistory, String> {
                 throw new RuntimeException(e);
             }
         }
+    }
+
+    @Override
+    public BalanceHistory save(BalanceHistory toSave) {
+        String sql = "INSERT INTO \"balancehistory\" (value, updatedatetime, accountid) VALUES " +
+                "( " + toSave.getValue() + ", '" + toSave.getUpdateDateTime() + "' , '" + toSave.getAccountId() + "') ;";
+
+        try {
+            connection.createStatement().executeUpdate(sql);
+            return toSave;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return toSave;
     }
 }
